@@ -1,10 +1,18 @@
 package spec;
 
 /**
+ * @author PiJ
+ * Some formatting added to spec to improve Javadoc layout, by @author BBK-PiJ-2015-74
+ */
+
+/**
+ * <p>
  * A contact is a person we are making business with or may do in the future.
  * <p/>
+ * <p>
  * Contacts have an ID (unique, a non-zero positive integer), a name (not necessarily unique)
  * and notes that the user may want to save about them.
+ * <p/>
  */
 public interface Contact {
 

@@ -1,36 +1,52 @@
 package test;
 
+import impl.ContactImpl;
 import static org.junit.Assert.*;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import spec.Contact;
 
+/**
+ * @author BBK-PiJ-2015-74
+ * @since 07.02.2016
+ */
 public class ContactImplTest {
+	
+	private Contact testContact1;
+    private Contact testContact2;
+    private String testFullName;
+    private String testNotes1, testNotes2;
+    private int testID;
+	
+    @Before
+    public void setUp() {
+        testID = 10;
+        testFullName = "Humpty Dumpty";
+        testNotes1 = "He's a good egg";
+        testNotes2 = "All the king's horses and all the king's men couldn't put Humpty back together again";
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+        testContact1 = new ContactImpl(testID, testFullName, testNotes1);
+        testContact2 = new ContactImpl(testID, testFullName, testNotes2);
+    }
+	
+    /**
+	 * Tests whether getId() returns testID
+	 * This test will fail before ContactImpl implemented 
+	 */
+	@Test 
+	public void contactGetIdReturnsID() {
+		assertEquals (testID, testContact1.getId());
 	}
-	
-	@Before
-	public void setUp() throws Exception {
-	}
-	
-	private int testID = 1;
-	private String testName = "Humpty Dumpty";
-	private String testEmptyNote = "";
-	private String testNotes = "He's a good egg";
-	
-	/**
+    
+    /**
 	 * Tests whether getId() returns an int 
-	 * Fails before Contact is implemented (testing interface only)
+	 * This test should pass because testID has been defined as an int
 	 */
 	@Test 
 	public void contactGetIdReturnsIntTest() {
-		fail("Not yet implemented");
+		assertTrue (testContact1.getId() == (int)testContact1.getId());
 	}
 	
 	/**
@@ -61,11 +77,14 @@ public class ContactImplTest {
 	}
 	
 	@After
-	public void tearDown() throws Exception {
-	}
-	
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+    public void tearDown() {
+		testID = 0;
+        testFullName = null;
+        testNotes1 = null;
+        testNotes2 = null;
+
+        testContact1 = null;
+        testContact1 = null;
+    }
 	
 }

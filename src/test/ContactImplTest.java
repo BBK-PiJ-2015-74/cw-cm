@@ -1,7 +1,10 @@
 package test;
 
 import impl.ContactImpl;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,8 +17,8 @@ import spec.Contact;
  */
 public class ContactImplTest {
 	
-	private Contact testContact1;
-    private Contact testContact2;
+	private Contact testCt1;
+    private Contact testCt2;
     private String testFullName;
     private String testNotes1, testNotes2;
     private int testID;
@@ -27,18 +30,79 @@ public class ContactImplTest {
         testNotes1 = "He's a good egg";
         testNotes2 = "All the king's horses and all the king's men couldn't put Humpty back together again";
 
-        testContact1 = new ContactImpl(testID, testFullName, testNotes1);
-        testContact2 = new ContactImpl(testID, testFullName, testNotes2);
+        testCt1 = new ContactImpl(testID, testFullName, testNotes1);
+        testCt2 = new ContactImpl(testID, testFullName, testNotes2);
     }
 	
+    
     /**
-	 * Tests whether getId() returns testID
-	 * This test will fail before ContactImpl implemented 
-	 */
-	@Test 
-	public void contactGetIdReturnsID() {
-		assertEquals (testID, testContact1.getId());
-	}
+     * Test whether constructor is implemented correctly - tests notes
+     */
+    @Test
+    public void testNotesFromConstructor() {
+    	assertEquals(testNotes1, testCt1.getNotes());
+    }
+    
+    /** 
+     * Test whether constructor is implemented correctly - tests name
+     */
+    @Test
+    public void testNamefromConstructor() {
+    	assertEquals(testFullName, testCt1.getName());
+    }
+    
+    /** 
+     * Test whether constructor is implemented correctly - test ID
+     */
+    @Test
+    public void testIDfromConstructor() {
+    	assertEquals(testID,testCt1.getId());
+    }
+    
+    /**
+     * Test whether constructor is implemented correctly - null name
+     */
+    @Test
+    public void testConstructorNullName() {
+    	Contact testCt = new ContactImpl(testID, null, testNotes1);
+    	assertNull(testCt.getName());
+    }
+    
+    /**
+     * Test whether constructor is implemented correctly - empty name
+     */
+    @Test
+    public void testConstructorEmptyName() {
+    	Contact testCt = new ContactImpl(testID, testFullName,"");
+    	assertEquals("", testCt.getName());
+    }
+    
+    /**
+     * Test whether constructor is implemented correctly - null notes
+     */
+    @Test
+    public void testConstructorNullNotes() {
+    	Contact testCt = new ContactImpl(testID, testFullName, null);
+    	assertNull(testCt.getNotes());
+    }
+    
+    /**
+     * Test whether constructor is implemented correctly - empty notes
+     */
+    @Test
+    public void testConstructorEmptyNotes() {
+    	Contact testCt = new ContactImpl(testID, testFullName,"");
+    	assertEquals("", testCt.getName());
+    }
+    
+    /**
+     * Test whether constructor is implemented correctly - notes with null name
+     */
+    @Test
+    public void testConstructorNotesWithNullName(){
+    	Contact testCt = new ContactImpl(testID, null,testNotes1);
+    	assertEquals(testNotes1, testCt.getNotes());
+    }
     
     /**
 	 * Tests whether getId() returns an int 
@@ -46,7 +110,16 @@ public class ContactImplTest {
 	 */
 	@Test 
 	public void contactGetIdReturnsIntTest() {
-		assertTrue (testContact1.getId() == (int)testContact1.getId());
+		assertTrue (testCt1.getId() == (int)testCt1.getId());
+	}
+    
+    /**
+	 * Tests whether getId() returns testID
+	 * This test will fail before ContactImpl implemented 
+	 */
+	@Test 
+	public void contactGetIdReturnsID() {
+		assertEquals (testID, testCt1.getId());
 	}
 	
 	/**
@@ -82,9 +155,8 @@ public class ContactImplTest {
         testFullName = null;
         testNotes1 = null;
         testNotes2 = null;
-
-        testContact1 = null;
-        testContact1 = null;
+        testCt1 = null;
+        testCt2 = null;
     }
 	
 }

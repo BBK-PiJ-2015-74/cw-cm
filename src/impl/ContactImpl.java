@@ -59,7 +59,7 @@ public class ContactImpl implements Contact, Serializable {
 	public ContactImpl(int id, String name, String notes) {
 		
 		this (id, name); // this passes the parameters from the first constructor through to the second
-		addNotes(notes); // 
+		addNotes(notes); 
 	}
 	
 

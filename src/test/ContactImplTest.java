@@ -53,6 +53,8 @@ public class ContactImplTest {
     
     /** 
      * Test whether constructor is implemented correctly - test ID
+     * won't work until getId() is implemented
+     * 
      */
     @Test
     public void testIDfromConstructor() {
@@ -61,15 +63,17 @@ public class ContactImplTest {
     
     /**
      * Test whether constructor is implemented correctly - null name
+     * won't work until getName() is implemented
+     * Error rather than test failure because null name throws an exception
      */
-    @Test
+    @Test (expected = NullPointerException.class)
     public void testConstructorNullName() {
     	Contact testCt = new ContactImpl(testID, null, testNotes1);
-    	assertNull(testCt.getName());
     }
     
     /**
      * Test whether constructor is implemented correctly - empty name
+     * won't work until getName() is implemented
      */
     @Test
     public void testConstructorEmptyName() {
@@ -79,6 +83,7 @@ public class ContactImplTest {
     
     /**
      * Test whether constructor is implemented correctly - null notes
+     * won't work until getNotes() is implemented
      */
     @Test
     public void testConstructorNullNotes() {
@@ -97,11 +102,11 @@ public class ContactImplTest {
     
     /**
      * Test whether constructor is implemented correctly - notes with null name
+     * Null name throws exception
      */
-    @Test
+    @Test (expected = NullPointerException.class)
     public void testConstructorNotesWithNullName(){
-    	Contact testCt = new ContactImpl(testID, null,testNotes1);
-    	assertEquals(testNotes1, testCt.getNotes());
+    	Contact ct = new ContactImpl(testID, null,testNotes1);
     }
     
     /**
@@ -115,7 +120,7 @@ public class ContactImplTest {
     
     /**
 	 * Tests whether getId() returns testID
-	 * This test will fail before ContactImpl implemented 
+	 * This test will fail until getId() implemented
 	 */
 	@Test 
 	public void contactGetIdReturnsID() {

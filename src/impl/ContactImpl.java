@@ -29,7 +29,9 @@ public class ContactImpl implements Contact, Serializable {
 	 * @param initialNotes, the initial set of notes about the contact
 	 */
 	public ContactImpl(int ID, String fullName, String initialNotes) {
-		// TODO Auto-generated constructor stub	
+		ID = 0;
+		fullName = null;
+		initialNotes = null;
 	}
 	
 	/**
@@ -41,6 +43,10 @@ public class ContactImpl implements Contact, Serializable {
 	 * @param fullName
 	 */
 	public ContactImpl(int ID, String fullName) {
+//		try {
+//			
+//		}
+	
 		//TODO second constructor stub
 	}
 

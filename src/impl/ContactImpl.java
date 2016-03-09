@@ -6,7 +6,6 @@
 package impl;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import spec.Contact;
@@ -16,12 +15,13 @@ public class ContactImpl implements Contact, Serializable {
 	
 	/**
 	 * Chose to use a list to hold the added notes so this can be easily updated and output
+	 * contactNotes is initialised as an Array List using the Java Collections Array List interface 
 	 * Otherwise we just have to make a longer string every time and it's difficult to track updates
 	 * Successive notes will be added to an array list
 	 */
 	private int contactId;
 	private String contactName;
-	private List<String> contactNotes;
+	private ArrayList<String> contactNotes;
 
 	/**
 	 * This constructor creates a new Contact without notes
@@ -44,7 +44,7 @@ public class ContactImpl implements Contact, Serializable {
 		
 		this.contactId = Objects.requireNonNull(id);
 		this.contactName = Objects.requireNonNull(name);
-		contactNotes = new ArrayList<>(); // initialises a new array list to hold the notes
+		this.contactNotes = new ArrayList<String>(); 
 	}
 	
 	/**

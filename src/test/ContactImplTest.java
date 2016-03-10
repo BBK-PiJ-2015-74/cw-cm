@@ -122,7 +122,7 @@ public class ContactImplTest {
      */
     @Test (expected = NullPointerException.class)
     public void testConstructorNotesWithNullName(){
-    	Contact ct = new ContactImpl(testID, null,testNotes1);
+    	Contact testCt3 = new ContactImpl(testID, null,testNotes1);
     }
     
     /**
@@ -171,13 +171,46 @@ public class ContactImplTest {
 	}
 	
 	/**
-	 * Tests whether addNotes(note) takes argument (note) correctly
-	 * Fails before Contact is implemented (testing interface only)
+	 * Tests addNotes(note) to empty note
 	 */
 	@Test
-	public void contactAddNotesAcceptsArgumentNote() {
-		fail("Not yet implemented");
+	public void testAddNotesToEmptyNote() {
+		Contact testCt4 = new ContactImpl(testID, testName, "");
+		testCt4.addNotes(testNotes2);
+		assertEquals(testNotes2, testCt4.getNotes());
 	}
+	
+	/**
+	 * Tests addNotes(note) to null note
+	 */
+	@Test
+	public void testAddNotesToNullNote() {
+		Contact testCt5 = new ContactImpl(testID, testName, null);
+		testCt5.addNotes(testNotes2);
+		assertEquals(testNotes2, testCt5.getNotes());
+	}
+	
+	/**
+	 * Tests addNotes(empty) to null note
+	 * @throws IllegalArgumentException
+	 * @see ContactManager #addNewContact(String name, String notes) states note cannot be empty
+	 */
+	@Test (expected = IllegalArgumentException.class)
+	public void testAddEmptyNotesToNullNote() {
+		Contact testCt5 = new ContactImpl(testID, testName, null);
+		testCt5.addNotes("");
+	}
+	
+	/**
+	 * Tests add null notes
+	 * @throws NullPointerException
+	 */
+	@Test (expected = NullPointerException.class)
+	public void testAddNullNotes() {
+		Contact testCt6 = new ContactImpl(testID, testName, testNotes2);
+		testCt6.addNotes(null);
+	}
+	
 	
 	@After
     public void tearDown() {

@@ -44,7 +44,7 @@ public class ContactImpl implements Contact, Serializable {
 		
 		this.contactId = Objects.requireNonNull(id);
 		this.contactName = Objects.requireNonNull(name);
-		this.contactNotes = new ArrayList<String>(); 
+		contactNotes = new ArrayList<String>(); 
 	}
 	
 	/**
@@ -62,29 +62,37 @@ public class ContactImpl implements Contact, Serializable {
 		addNotes(notes); 
 	}
 	
-
+	/**
+	 * @see Contact#getId()
+	 */
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return contactId;
 	}
 
+	/**
+	 * @see Contact#getName()
+	 */
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return contactName;
 	}
 
+	/**
+	 * @see Contact#getNotes()
+	 */
 	@Override
 	public String getNotes() {
-		// TODO Auto-generated method stub
-		return null;
+		return contactNotes; // type mismatch - cannot convert from ArrayList<String> to String - what to do??
 	}
 
 	@Override
 	public void addNotes(String note) {
-		// TODO Auto-generated method stub
-
+		Objects.requireNonNull(note);
+		if (note.equals("")) {
+			throw new IllegalArgumentException ("Error in contact: notes cannot be empty" + "for contactId :" + contactId);
+		}
+		contactNotes.add(note);
 	}
 
 }

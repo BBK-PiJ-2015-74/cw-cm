@@ -113,8 +113,7 @@ public class MeetingImplTest {
 	/**
 	 * a basic mock class created to test the functionality of interface Meeting
 	 *
-	 */
-	
+	 */	
 	private class MeetingMock implements Meeting {
 		
 		private int mockMeetingID;
@@ -124,6 +123,10 @@ public class MeetingImplTest {
 		private MeetingMock (int id, Calendar date, Set<Contact> contacts) {
 			if (id <=0 ) {
 				throw new IllegalArgumentException ("meeting ID must be positive and non-zero");
+			}
+			
+			if (contacts.isEmpty()){
+				throw new IllegalArgumentException ("Contacts cannot be empty");
 			}
 			
 			Objects.requireNonNull(date);

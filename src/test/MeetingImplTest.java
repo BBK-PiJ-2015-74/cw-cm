@@ -31,20 +31,89 @@ public class MeetingImplTest {
 	private int meetingID;
 	private Calendar meetingDate;
 	private Set<Contact> meetingDelegates;
-	private Meeting meeting;
+	private Meeting mockMeeting;
+	
+	/**
+	 * Create a mock meeting to test 
+	 * class {@code MeetingMock} sets up a basic meeting with an id, date and contacts
+	 */
+	
+	Contact ct1 = new ContactImpl(279, "Humpty Dumpty", "He's a good egg");
+	Contact ct2 = new ContactImpl(823, "Little Miss Muppet", "The spider scared her"); 
+	Contact ct3 = new ContactImpl(526, "The Grand Old Duke of York", "He had ten thousand men");
 	
 	@Before
-	public void setUpMockMeeting() {
-		
-		Meeting mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+	public void setUp() {
+		meetingID = 001;
+		meetingDate = new GregorianCalendar(1974,06,06);		
+		meetingDelegates = new HashSet<>();
+		meetingDelegates.add(ct1);
+		meetingDelegates.add(ct2);
+		meetingDelegates.add(ct3);
+	}
+	
+	@Test
+	public void testMeetingID() {
+		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		assertEquals(001, mockMeeting.getId());
+	}
+	
+	@Test
+	public void testMeetingDate() {
+		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		assertEquals (new GregorianCalendar(1974,06,06), mockMeeting.getDate());
+	}
+	
+	@Test
+	public void testMeetingDelegates() {
+		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		assertEquals (meetingDelegates, mockMeeting.getContacts());
 	}
 
 	@Test
-	public void test() throws Exception {
-		fail("Not yet implemented");
+	public void testMeetingsEqualSame() {	
+		int testMeetingID = 001;
+		Calendar testMeetingDate = new GregorianCalendar(1974,06,06);
+		Set<Contact> testDelegates = new HashSet<>();
+		testDelegates.add(ct1);
+		testDelegates.add(ct2);
+		testDelegates.add(ct3);
+		
+		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		Meeting testMeeting = new MeetingMock(testMeetingID, testMeetingDate, testDelegates);
+		assertTrue(mockMeeting.equals(testMeeting));
 	}
-
-	// Create a test meeting with some basic details using a mock
+	
+	@Test (expected = NullPointerException.class)
+	public void nullDateThrowsException() {
+		mockMeeting = new MeetingMock(meetingID, null, meetingDelegates);
+	}
+	
+	@Test (expected = NullPointerException.class)
+	public void nullContactsThrowsException() {
+		mockMeeting = new MeetingMock(meetingID, meetingDate, null);
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void negativeIDThrowsException() {
+		mockMeeting = new MeetingMock(-1, meetingDate, meetingDelegates);
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void zeroIDThrowsException() {
+		mockMeeting = new MeetingMock(0, meetingDate, meetingDelegates);
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void emptyContactsThrowsException() {
+		Set<Contact> emptyContacts = new HashSet<>();
+		mockMeeting = new MeetingMock(meetingID, meetingDate, emptyContacts);
+	}
+	
+	/**
+	 * a basic mock class created to test the functionality of interface Meeting
+	 *
+	 */
 	
 	private class MeetingMock implements Meeting {
 		
@@ -63,18 +132,6 @@ public class MeetingImplTest {
 			this.mockMeetingID = id;
 			this.mockMeetingDate = date;
 			this.mockMeetingDelegates = contacts;
-		
-			mockMeetingID = 001;
-			mockMeetingDate = new GregorianCalendar(1974, 06, 06);
-			
-			Contact ct1 = new ContactImpl(279, "Humpty Dumpty", "He's a good egg");
-			Contact ct2 = new ContactImpl(823, "Little Miss Muppet", "The spider scared her"); 
-			Contact ct3 = new ContactImpl(526, "The Grand Old Duke of York", "He had ten thousand men");		
-			
-			mockMeetingDelegates = new HashSet<>();
-			mockMeetingDelegates.add(ct1);
-			mockMeetingDelegates.add(ct2);
-			mockMeetingDelegates.add(ct3);
 		}
 		
 		@Override
@@ -91,8 +148,7 @@ public class MeetingImplTest {
 		public Set<Contact> getContacts() {
 			return mockMeetingDelegates;
 		}
-	} // end of MeetingMock class
-	
+	}
 	
 	@After
 	public void tearDown() {

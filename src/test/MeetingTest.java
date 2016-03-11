@@ -49,23 +49,22 @@ public class MeetingTest {
 		meetingDelegates.add(ct1);
 		meetingDelegates.add(ct2);
 		meetingDelegates.add(ct3);
+		
+		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
 	}
 	
 	@Test
 	public void testMeetingID() {
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
 		assertEquals(001, mockMeeting.getId());
 	}
 	
 	@Test
 	public void testMeetingDate() {
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
 		assertEquals (new GregorianCalendar(1974,06,06), mockMeeting.getDate());
 	}
 	
 	@Test
 	public void testMeetingDelegates() {
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
 		assertEquals (meetingDelegates, mockMeeting.getContacts());
 	}
 
@@ -75,22 +74,18 @@ public class MeetingTest {
 		testDelegates.add(ct1);
 		testDelegates.add(ct2);
 		testDelegates.add(ct3);
-		
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
 		assertTrue(testDelegates.equals(mockMeeting.getContacts()));
 	}
 	
 	@Test
 	public void testIDEqualsSame() {
 		int testMeetingID = 001;
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
 		assertTrue(testMeetingID == mockMeeting.getId());
 	}
 	
 	@Test 
 	public void testMeetingDateEqualsSame() {
 		Calendar testDate = new GregorianCalendar(1974,06,06);
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
 		assertTrue(testDate.equals(mockMeeting.getDate()));
 	}
 	
@@ -103,7 +98,6 @@ public class MeetingTest {
 		testDelegates.add(ct1);
 		testDelegates.add(ct2);
 		testDelegates.add(ct3);
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
 		Meeting testMeeting = new MeetingMock(testID, testDate, testDelegates);
 		assertTrue(testMeeting.equals(mockMeeting));
 	}

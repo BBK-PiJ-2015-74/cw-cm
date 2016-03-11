@@ -16,7 +16,8 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 	
 	/**
 	 * The class implementing this interface has one constructor with four parameters:
-	 * an ID (int), a date, a set of contacts that must be non-empty, and a String containing the notes for the meetin
+	 * an ID (int), a date, a set of contacts that must be non-empty, and a String containing the notes for the meeting
+	 * 
 	 * @param int meetingID the id of the meeting
 	 * @param Calendar meetingDate the date of the meeting
 	 * @param Set<Contact> meetingDelegates the set of contacts that attended the meeting
@@ -28,24 +29,6 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 
 	public PastMeetingImpl() {
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Calendar getDate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<Contact> getContacts() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

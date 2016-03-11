@@ -71,17 +71,42 @@ public class MeetingImplTest {
 	}
 
 	@Test
-	public void testMeetingsEqualSame() {	
-		int testMeetingID = 001;
-		Calendar testMeetingDate = new GregorianCalendar(1974,06,06);
+	public void testContactsEqualSame() {	
 		Set<Contact> testDelegates = new HashSet<>();
 		testDelegates.add(ct1);
 		testDelegates.add(ct2);
 		testDelegates.add(ct3);
 		
 		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
-		Meeting testMeeting = new MeetingMock(testMeetingID, testMeetingDate, testDelegates);
-		assertTrue(mockMeeting.equals(testMeeting));
+		assertTrue(testDelegates.equals(mockMeeting.getContacts()));
+	}
+	
+	@Test
+	public void testIDEqualsSame() {
+		int testMeetingID = 001;
+		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		assertTrue(testMeetingID == mockMeeting.getId());
+	}
+	
+	@Test 
+	public void testMeetingDateEqualsSame() {
+		Calendar testDate = new GregorianCalendar(1974,06,06);
+		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		assertTrue(testDate.equals(mockMeeting.getDate()));
+	}
+	
+	// why does this test fail when testContactsEqualsSame(), testIDEqualsSame() and testMeetingDateEqualsSame() all pass?
+	@Test
+	public void testMeetingsEqualSame() {
+		int testID = 001;
+		Calendar testDate = new GregorianCalendar(1974,06,06);
+		Set<Contact> testDelegates = new HashSet<>();
+		testDelegates.add(ct1);
+		testDelegates.add(ct2);
+		testDelegates.add(ct3);
+		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		Meeting testMeeting = new MeetingMock(testID, testDate, testDelegates);
+		assertTrue(testMeeting.equals(mockMeeting));
 	}
 	
 	@Test (expected = NullPointerException.class)
@@ -155,7 +180,12 @@ public class MeetingImplTest {
 	
 	@After
 	public void tearDown() {
-		Meeting mockMeeting = null;
+		meetingID = 0;
+		meetingDate = null;		
+		meetingDelegates = null;
+		ct1 = null;
+		ct2 = null;
+		ct3 = null;
 	}
 	
 }

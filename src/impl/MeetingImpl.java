@@ -21,7 +21,7 @@ import java.io.Serializable;
  *  Instead, we'll use new PastMeetingImpl and new FutureMeetingImpl to create instances of meeting objects
  */
 
-public class MeetingImpl implements Meeting, Serializable {
+public abstract class MeetingImpl implements Meeting, Serializable {
 
 	/**
 	 * Constructs a Meeting
@@ -55,25 +55,25 @@ public class MeetingImpl implements Meeting, Serializable {
 		this.meetingDelegates = contacts;
 		}
 		
-		/**
-		 * @see Meeting#getId()
-		 */
+	/**
+	 * @see Meeting#getId()
+	 */
 		@Override
 		public int getId() {
 			return meetingID;
 		}
 	
-		/**
-		 * @see Meeting#getDate()
-		 */
+	/**
+	 * @see Meeting#getDate()
+	 */
 		@Override
 		public Calendar getDate() {
 			return meetingDate;
 		}
 		
-		/**
-		 * @see Meeting#getContacts()
-		 */
+	/**
+	 * @see Meeting#getContacts()
+	 */
 		@Override
 		public Set<Contact> getContacts() {
 			return meetingDelegates;

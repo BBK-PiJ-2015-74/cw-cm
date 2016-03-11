@@ -18,22 +18,21 @@ import spec.Contact;
 public class ContactImplTest {
 	
 	private Contact testCt1, testCt2;
-    private String testName, testName2;
+    private String testName1, testName2;
     private String testNotes1, testNotes2;
     private int testID;
 	
     @Before
     public void setUp() {
         testID = 10;
-        testName = "Humpty_Dumpty";
+        testName1 = "Humpty_Dumpty";
         testName2 = "Moppet the Kitten";
         testNotes1 = "He's a good egg";
         testNotes2 = "All the king's horses and all the king's men couldn't put Humpty back together again";
 
-        testCt1 = new ContactImpl(testID, testName, testNotes1);
+        testCt1 = new ContactImpl(testID, testName1, testNotes1);
         testCt2 = new ContactImpl(testID, testName2, testNotes2);
     }
-	
     
     /** 
      * Test whether constructor is implemented correctly - test ID
@@ -50,7 +49,7 @@ public class ContactImplTest {
      */
     @Test
     public void testNamefromConstructor() {
-    	assertEquals(testName, testCt1.getName());
+    	assertEquals(testName1, testCt1.getName());
     }
     
     /**
@@ -59,7 +58,7 @@ public class ContactImplTest {
      */
     @Test
     public void testNotesFromConstructor() {
-    	assertEquals(testNotes1, testCt1.getNotes());
+    	assertEquals("\n" + testNotes1, testCt1.getNotes());
     }
     
     /**
@@ -75,7 +74,7 @@ public class ContactImplTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void testConstructorNegativeID() {
-    	Contact testCt = new ContactImpl(-1, testName, testNotes2);
+    	Contact testCt = new ContactImpl(-1, testName2, testNotes2);
     }
     
     /** 
@@ -83,7 +82,7 @@ public class ContactImplTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void testConstructorZeroID() {
-    	Contact testCt = new ContactImpl(0, testName, testNotes2);
+    	Contact testCt = new ContactImpl(0, testName2, testNotes2);
     }
     
     /**
@@ -97,23 +96,20 @@ public class ContactImplTest {
     
     /**
      * Test whether constructor is implemented correctly - null notes
-     * won't work until getNotes() is implemented
-     * should throw NullPointerException for null notes?
+     * @throws NullPointerException
      */
-    @Test
+    @Test (expected = NullPointerException.class)
     public void testConstructorNullNotes() {
-    	Contact testCt = new ContactImpl(testID, testName, null);
-    	assertNull(testCt.getNotes());
+    	Contact testCt = new ContactImpl(testID, testName1, null);
     }
     
     /**
      * Test whether constructor is implemented correctly - empty notes
-     * won't work until getName() is implemented
+     * @throws IllegalArgumentException - notes cannot be empty
      */
-    @Test
+    @Test (expected = IllegalArgumentException.class)
     public void testConstructorEmptyNotes() {
-    	Contact testCt = new ContactImpl(testID, testName,"");
-    	assertEquals("", testCt.getName());
+    	Contact testCt = new ContactImpl(testID, testName1,"");
     }
     
     /**
@@ -149,7 +145,7 @@ public class ContactImplTest {
 	 */
 	@Test
 	public void testContactGetNameReturnsExpectedName() {
-		assertEquals (testName, testCt1.getName());
+		assertEquals (testName1, testCt1.getName());
 	}
 	
 	/**
@@ -167,37 +163,37 @@ public class ContactImplTest {
 	 */
 	@Test
 	public void testContactGetNotesReturnsNotes() {
-		assertEquals (testNotes2, testCt2.getNotes());
+		assertEquals ("\n" + testNotes2, testCt2.getNotes());
 	}
 	
 	/**
 	 * Tests addNotes(note) to empty note
+	 * @throws IllegalArgumentException
 	 */
-	@Test
+	@Test (expected = IllegalArgumentException.class)
 	public void testAddNotesToEmptyNote() {
-		Contact testCt4 = new ContactImpl(testID, testName, "");
+		Contact testCt4 = new ContactImpl(testID, testName1, "");
 		testCt4.addNotes(testNotes2);
-		assertEquals(testNotes2, testCt4.getNotes());
 	}
 	
 	/**
 	 * Tests addNotes(note) to null note
+	 * Note will be null when object initialised via second constructor
 	 */
-	@Test
+	@Test (expected = NullPointerException.class)
 	public void testAddNotesToNullNote() {
-		Contact testCt5 = new ContactImpl(testID, testName, null);
+		Contact testCt5 = new ContactImpl(testID, testName1, null);
 		testCt5.addNotes(testNotes2);
-		assertEquals(testNotes2, testCt5.getNotes());
 	}
 	
 	/**
-	 * Tests addNotes(empty) to null note
+	 * Tests addNotes(empty) to note (note by definition cannot be null, see testAddNotestoNullNote)
 	 * @throws IllegalArgumentException
 	 * @see ContactManager #addNewContact(String name, String notes) states note cannot be empty
 	 */
 	@Test (expected = IllegalArgumentException.class)
-	public void testAddEmptyNotesToNullNote() {
-		Contact testCt5 = new ContactImpl(testID, testName, null);
+	public void testAddEmptyNotesToNote() {
+		Contact testCt5 = new ContactImpl(testID, testName1, testNotes1);
 		testCt5.addNotes("");
 	}
 	
@@ -207,7 +203,7 @@ public class ContactImplTest {
 	 */
 	@Test (expected = NullPointerException.class)
 	public void testAddNullNotes() {
-		Contact testCt6 = new ContactImpl(testID, testName, testNotes2);
+		Contact testCt6 = new ContactImpl(testID, testName1, testNotes2);
 		testCt6.addNotes(null);
 	}
 	
@@ -215,7 +211,7 @@ public class ContactImplTest {
 	@After
     public void tearDown() {
 		testID = 0;
-        testName = null;
+        testName1 = null;
         testName2 = null;
         testNotes1 = null;
         testNotes2 = null;

@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class ContactImpl implements Contact, Serializable {
 	
 	/**
-	 * Chose to use a list to hold the added notes so this can be easily updated and output
+	 * Chose to use an array list to hold the added notes so this can be easily updated and output
 	 * contactNotes is initialised as an Array List using the Java Collections Array List interface 
 	 * Otherwise we just have to make a longer string every time and it's difficult to track updates
 	 * Successive notes will be added to an array list
@@ -44,7 +44,7 @@ public class ContactImpl implements Contact, Serializable {
 		
 		this.contactId = Objects.requireNonNull(id);
 		this.contactName = Objects.requireNonNull(name);
-		contactNotes = new ArrayList<String>(); 
+		contactNotes = new ArrayList<>(); 
 	}
 	
 	/**
@@ -83,9 +83,18 @@ public class ContactImpl implements Contact, Serializable {
 	 */
 	@Override
 	public String getNotes() {
-		return contactNotes; // type mismatch - cannot convert from ArrayList<String> to String - what to do??
+		String notesString = "";
+		for (int k = 0; k <= contactNotes.size()-1; k++) {
+			notesString = notesString + "\n" + contactNotes.get(k);
+		}
+		return notesString;
 	}
 
+	/**
+	 * @see Contact#addNotes(note)
+	 * @see Contact#addNewContact(String name, String notes)
+	 * This specifies an IllegalArgumentException must be returned if the name or notes are empty strings
+	 */
 	@Override
 	public void addNotes(String note) {
 		Objects.requireNonNull(note);

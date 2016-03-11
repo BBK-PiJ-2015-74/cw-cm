@@ -25,7 +25,7 @@ import java.util.Objects;
  * Try setting up a mock meeting to test the implementation
  */
 
-public class MeetingImplTest {
+public class MeetingTest {
 
 	private int meetingID;
 	private Calendar meetingDate;

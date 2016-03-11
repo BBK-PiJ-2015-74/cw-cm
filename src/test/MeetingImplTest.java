@@ -3,9 +3,9 @@ package test;
 import spec.Contact;
 import spec.Meeting;
 import impl.ContactImpl;
+import impl.MeetingImpl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -54,19 +54,19 @@ public class MeetingImplTest {
 	
 	@Test
 	public void testMeetingID() {
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		mockMeeting = new MeetingImpl(meetingID, meetingDate, meetingDelegates);
 		assertEquals(001, mockMeeting.getId());
 	}
 	
 	@Test
 	public void testMeetingDate() {
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		mockMeeting = new MeetingImpl(meetingID, meetingDate, meetingDelegates);
 		assertEquals (new GregorianCalendar(1974,06,06), mockMeeting.getDate());
 	}
 	
 	@Test
 	public void testMeetingDelegates() {
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		mockMeeting = new MeetingImpl(meetingID, meetingDate, meetingDelegates);
 		assertEquals (meetingDelegates, mockMeeting.getContacts());
 	}
 
@@ -77,21 +77,21 @@ public class MeetingImplTest {
 		testDelegates.add(ct2);
 		testDelegates.add(ct3);
 		
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		mockMeeting = new MeetingImpl(meetingID, meetingDate, meetingDelegates);
 		assertTrue(testDelegates.equals(mockMeeting.getContacts()));
 	}
 	
 	@Test
 	public void testIDEqualsSame() {
 		int testMeetingID = 001;
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		mockMeeting = new MeetingImpl(meetingID, meetingDate, meetingDelegates);
 		assertTrue(testMeetingID == mockMeeting.getId());
 	}
 	
 	@Test 
 	public void testMeetingDateEqualsSame() {
 		Calendar testDate = new GregorianCalendar(1974,06,06);
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
+		mockMeeting = new MeetingImpl(meetingID, meetingDate, meetingDelegates);
 		assertTrue(testDate.equals(mockMeeting.getDate()));
 	}
 	
@@ -104,35 +104,35 @@ public class MeetingImplTest {
 		testDelegates.add(ct1);
 		testDelegates.add(ct2);
 		testDelegates.add(ct3);
-		mockMeeting = new MeetingMock(meetingID, meetingDate, meetingDelegates);
-		Meeting testMeeting = new MeetingMock(testID, testDate, testDelegates);
+		mockMeeting = new MeetingImpl(meetingID, meetingDate, meetingDelegates);
+		Meeting testMeeting = new MeetingImpl(testID, testDate, testDelegates);
 		assertTrue(testMeeting.equals(mockMeeting));
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void nullDateThrowsException() {
-		mockMeeting = new MeetingMock(meetingID, null, meetingDelegates);
+		mockMeeting = new MeetingImpl(meetingID, null, meetingDelegates);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void nullContactsThrowsException() {
-		mockMeeting = new MeetingMock(meetingID, meetingDate, null);
+		mockMeeting = new MeetingImpl(meetingID, meetingDate, null);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void negativeIDThrowsException() {
-		mockMeeting = new MeetingMock(-1, meetingDate, meetingDelegates);
+		mockMeeting = new MeetingImpl(-1, meetingDate, meetingDelegates);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void zeroIDThrowsException() {
-		mockMeeting = new MeetingMock(0, meetingDate, meetingDelegates);
+		mockMeeting = new MeetingImpl(0, meetingDate, meetingDelegates);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void emptyContactsThrowsException() {
 		Set<Contact> emptyContacts = new HashSet<>();
-		mockMeeting = new MeetingMock(meetingID, meetingDate, emptyContacts);
+		mockMeeting = new MeetingImpl(meetingID, meetingDate, emptyContacts);
 	}
 	
 	/**

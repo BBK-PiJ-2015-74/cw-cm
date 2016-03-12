@@ -1,9 +1,11 @@
 package impl;
 
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.Set;
 
 import spec.Contact;
+import impl.MeetingImpl;
 import spec.PastMeeting;
 
 /**
@@ -27,8 +29,12 @@ public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 	 * @throws IllegalArgumentException if id is negative or zero or if contacts is empty
 	 */
 
-	public PastMeetingImpl() {
-		// TODO Auto-generated constructor stub
+	String meetingNotes;
+	
+	public PastMeetingImpl(int id, Calendar date, Set<Contact> contacts, String notes) {
+		super (id, date, contacts);
+		this.meetingNotes = notes; 
+		Objects.requireNonNull(notes);
 	}
 
 	@Override

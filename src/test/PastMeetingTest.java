@@ -31,10 +31,9 @@ public class PastMeetingTest {
 	private int meetingID;
 	private Calendar meetingDate;
 	private Set<Contact> meetingDelegates;
-	private ArrayList<String> meetingNotes, meetingNotes2;
 	private Meeting pastMeeting;
 	private Contact ct1, ct2, ct3;
-	private String pastMeetingNotes1, pastMeetingNotes2;
+	private String meetingNotes, meetingNotes1, meetingNotes2;
 	
 	/**
 	 * Set up a past meeting to test
@@ -54,14 +53,11 @@ public class PastMeetingTest {
 		meetingDelegates.add(ct2);
 		meetingDelegates.add(ct3);
 		
-		pastMeetingNotes1 = "Three in a bed and the little one said";
-		pastMeetingNotes2 = "Roll over";
+		meetingNotes1 = "Three in a bed and the little one said";
+		meetingNotes2 = "Roll over";
+		meetingNotes = meetingNotes1.concat(" meetingNotes2");
 		
-		meetingNotes = new ArrayList<>();
-		meetingNotes.add(pastMeetingNotes1);
-		meetingNotes.add(pastMeetingNotes2);
-		
-		pastMeeting = new PastMeetingImpl (meetingID, meetingDate, meetingDelegates, meetingNotes);
+		pastMeeting = new PastMeetingImpl(meetingID, meetingDate, meetingDelegates, meetingNotes);
 	}
 
 	@Test
@@ -97,10 +93,6 @@ public class PastMeetingTest {
 		meetingDelegates2.add(ct2);
 		meetingDelegates2.add(ct3);
 		
-		meetingNotes2 = new ArrayList<>();
-		meetingNotes2.add(pastMeetingNotes1);
-		meetingNotes2.add(pastMeetingNotes2);
-		
 		Meeting pastMeeting2 = new PastMeetingImpl(012, date2, meetingDelegates2, meetingNotes2);
 		assertTrue(pastMeeting2.equals(pastMeeting));
 	}
@@ -112,10 +104,8 @@ public class PastMeetingTest {
 		meetingDelegates2.add(ct1);
 		meetingDelegates2.add(ct2);
 		meetingDelegates2.add(ct3);
-		
-		meetingNotes2 = new ArrayList<>();
-		meetingNotes2.add("This is a different note");
-		meetingNotes2.add("This note a very long and boring repetitive note");
+	
+		meetingNotes2 = "This note a very long and boring repetitive note";
 		
 		Meeting pastMeeting2 = new PastMeetingImpl(012, date2, meetingDelegates2, meetingNotes2);
 		assertFalse(pastMeeting2.equals(pastMeeting));

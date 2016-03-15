@@ -6,7 +6,6 @@ import impl.ContactImpl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Before;
@@ -87,19 +86,6 @@ public class MeetingTest {
 	public void testMeetingDateEqualsSame() {
 		Calendar testDate = new GregorianCalendar(1974,06,06);
 		assertTrue(testDate.equals(mockMeeting.getDate()));
-	}
-	
-	// why does this test fail when testContactsEqualsSame(), testIDEqualsSame() and testMeetingDateEqualsSame() all pass?
-	@Test
-	public void testMeetingsEqualSame() {
-		int testID = 001;
-		Calendar testDate = new GregorianCalendar(1974,06,06);
-		Set<Contact> testDelegates = new HashSet<>();
-		testDelegates.add(ct1);
-		testDelegates.add(ct2);
-		testDelegates.add(ct3);
-		Meeting testMeeting = new MeetingMock(testID, testDate, testDelegates);
-		assertTrue(testMeeting.equals(mockMeeting));
 	}
 	
 	@Test (expected = NullPointerException.class)

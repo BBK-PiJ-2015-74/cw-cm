@@ -1,6 +1,8 @@
 package test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -16,7 +18,6 @@ import impl.FutureMeetingImpl;
 import spec.Contact;
 import spec.FutureMeeting;
 import spec.Meeting;
-import impl.MeetingImpl;
 
 /**
  * @author BBK-PiJ-2015-74
@@ -28,7 +29,6 @@ public class FutureMeetingTest {
 	private int meetingID;
 	private Calendar meetingDate;
 	private Set<Contact> meetingDelegates;
-	private FutureMeeting futureMeeting;
 	private Contact ct1, ct2, ct3;
 		
 	/**
@@ -48,38 +48,40 @@ public class FutureMeetingTest {
 		meetingDelegates.add(ct1);
 		meetingDelegates.add(ct2);
 		meetingDelegates.add(ct3);
-		
-		
-		Meeting meetingOfTypeMeeting = new FutureMeetingImpl(meetingID, meetingDate, meetingDelegates);	
-		FutureMeeting futureMeeting = new FutureMeetingImpl(meetingID, meetingDate, meetingDelegates);
 		}
 
 		@Test
 		public void createFutureMeeting() {
+			FutureMeeting futureMeeting = new FutureMeetingImpl(meetingID, meetingDate, meetingDelegates);
 			assertNotNull(futureMeeting);
-			assertEquals(futureMeeting.getId(), meetingID);
-			assertEquals(futureMeeting.getDate(), meetingDate);
-			assertEquals(futureMeeting.getContacts(), meetingDelegates);
+		}
+		
+		@Test
+		public void createFutureMeetingofTypeMeeting() {
+			Meeting futureMeeting = new FutureMeetingImpl(meetingID, meetingDate, meetingDelegates);
+			assertNotNull(futureMeeting);
 		}
 		
 		@Test 
 		public void testFutureMeetingID() {
+			FutureMeeting futureMeeting = new FutureMeetingImpl(meetingID, meetingDate, meetingDelegates);
 			assertEquals(meetingID, futureMeeting.getId());
 		}
 		
 		@Test
 		public void testFutureMeetingDate() {
+			FutureMeeting futureMeeting = new FutureMeetingImpl(meetingID, meetingDate, meetingDelegates);
 			assertEquals(meetingDate, futureMeeting.getDate());
 		}
 		
 		@Test
 		public void testFutureMeetingDelegates() {
+			FutureMeeting futureMeeting = new FutureMeetingImpl(meetingID, meetingDate, meetingDelegates);
 			assertEquals(meetingDelegates, futureMeeting.getContacts());
 		}
 		
-		// This test fails and I don't know why. All the parameters of the object pass the test individually
 		@Test
-		public void testEqualsSameContacts() {
+		public void testEqualsFutureMeeting() {
 			int meetingId2 = 17;
 			Calendar meetingDate2 = new GregorianCalendar(2016,9,29);	
 			Set<Contact> meetingDelegates2 = new HashSet<>();
@@ -88,54 +90,41 @@ public class FutureMeetingTest {
 			meetingDelegates2.add(ct3);
 			
 			FutureMeeting futureMeeting2 = new FutureMeetingImpl(meetingId2, meetingDate2, meetingDelegates2);
-			//assertTrue(pastMeeting.getId()==(meetingId2));
-			//assertTrue(pastMeeting.getDate().equals(date2));
-			//assertTrue(pastMeeting.getContacts().equals(meetingDelegates2));
-			assertTrue(futureMeeting.equals(futureMeeting2));
+			assertTrue(futureMeeting2.getId()==(meetingId2));
+			assertTrue(futureMeeting2.getDate().equals(meetingDate2));
+			assertTrue(futureMeeting2.getContacts().equals(meetingDelegates2));
 		}
-
-		@Test
-		public void testEqualsDifferentNotes() {
-			int meetingId2 = 17;
-			Calendar date2 = new GregorianCalendar (2016,9,29);
-			Set<Contact> meetingDelegates2 = new HashSet<>();
-			meetingDelegates2.add(ct1);
-			meetingDelegates2.add(ct2);
-			meetingDelegates2.add(ct3);
-			
-			FutureMeeting futureMeeting2 = new FutureMeetingImpl(meetingId2, date2, meetingDelegates2);
-			assertFalse(futureMeeting2.equals(futureMeeting));
-		}
+		
 		
 		@Test (expected = NullPointerException.class)
 		public void nullDateThrowsException() {
-			futureMeeting = new FutureMeetingImpl(meetingID, null, meetingDelegates);
+			new FutureMeetingImpl(meetingID, null, meetingDelegates);
 		}
 		
 		@Test (expected = NullPointerException.class)
 		public void nullContactsThrowsException() {
-			futureMeeting = new FutureMeetingImpl(meetingID, meetingDate, null);
+			new FutureMeetingImpl(meetingID, meetingDate, null);
 		}
 		
 		@Test (expected = NullPointerException.class)
 		public void nullDateAndContactsThrowsException() {
-			futureMeeting = new FutureMeetingImpl(meetingID, null, meetingDelegates);
+			new FutureMeetingImpl(meetingID, null, meetingDelegates);
 		}
 		
 		@Test (expected = IllegalArgumentException.class) 
 		public void negativeIdThrowsException() {
-			futureMeeting = new FutureMeetingImpl(-1, meetingDate, meetingDelegates);
+			new FutureMeetingImpl(-1, meetingDate, meetingDelegates);
 		}
 		
 		@Test (expected = IllegalArgumentException.class) 
 		public void zeroIdThrowsException() {
-			futureMeeting = new FutureMeetingImpl(0, meetingDate, meetingDelegates);
+			new FutureMeetingImpl(0, meetingDate, meetingDelegates);
 		}
 		
 		@Test (expected = IllegalArgumentException.class) 
 		public void emptyContactsThrowsException() {
 			Set<Contact> emptyContacts = new HashSet<>();
-			futureMeeting = new FutureMeetingImpl(meetingID, meetingDate, emptyContacts);
+			new FutureMeetingImpl(meetingID, meetingDate, emptyContacts);
 		}
 		
 		

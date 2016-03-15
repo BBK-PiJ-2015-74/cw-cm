@@ -2,9 +2,7 @@ package test;
 
 import impl.ContactImpl;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +13,7 @@ import spec.Contact;
  * @author BBK-PiJ-2015-74
  * @since 07.02.2016
  */
-public class ContactImplTest {
+public class ContactTest {
 	
 	private Contact testCt1, testCt2;
     private String testName1, testName2;
@@ -66,7 +64,7 @@ public class ContactImplTest {
      */
     @Test (expected = NullPointerException.class)
     public void testConstructorNullName() {
-    	Contact testCt = new ContactImpl(testID, null, testNotes1);
+    	new ContactImpl(testID, null, testNotes1);
     }
     
     /** 
@@ -74,7 +72,7 @@ public class ContactImplTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void testConstructorNegativeID() {
-    	Contact testCt = new ContactImpl(-1, testName2, testNotes2);
+    	new ContactImpl(-1, testName2, testNotes2);
     }
     
     /** 
@@ -82,7 +80,7 @@ public class ContactImplTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void testConstructorZeroID() {
-    	Contact testCt = new ContactImpl(0, testName2, testNotes2);
+    	new ContactImpl(0, testName2, testNotes2);
     }
     
     /**
@@ -91,7 +89,7 @@ public class ContactImplTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void testConstructorEmptyName() {
-    	Contact testCt = new ContactImpl(testID, "", testNotes1);
+    	new ContactImpl(testID, "", testNotes1);
     }
     
     /**
@@ -100,7 +98,7 @@ public class ContactImplTest {
      */
     @Test (expected = NullPointerException.class)
     public void testConstructorNullNotes() {
-    	Contact testCt = new ContactImpl(testID, testName1, null);
+    	new ContactImpl(testID, testName1, null);
     }
     
     /**
@@ -109,7 +107,7 @@ public class ContactImplTest {
      */
     @Test (expected = IllegalArgumentException.class)
     public void testConstructorEmptyNotes() {
-    	Contact testCt = new ContactImpl(testID, testName1,"");
+    	new ContactImpl(testID, testName1,"");
     }
     
     /**
@@ -118,7 +116,7 @@ public class ContactImplTest {
      */
     @Test (expected = NullPointerException.class)
     public void testConstructorNotesWithNullName(){
-    	Contact testCt3 = new ContactImpl(testID, null,testNotes1);
+    	new ContactImpl(testID, null,testNotes1);
     }
     
     /**

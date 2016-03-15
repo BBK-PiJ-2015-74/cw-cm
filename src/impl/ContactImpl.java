@@ -14,6 +14,10 @@ import java.io.Serializable;
 public class ContactImpl implements Contact, Serializable {
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * Chose to use an array list to hold the added notes so this can be easily updated and output
 	 * contactNotes is initialised as an Array List using the Java Collections Array List interface 
 	 * Otherwise we just have to make a longer string every time and it's difficult to track updates

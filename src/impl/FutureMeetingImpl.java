@@ -5,7 +5,6 @@ import java.util.Set;
 import java.io.Serializable;
 
 import spec.Contact;
-import spec.Meeting;
 import spec.FutureMeeting;
 import impl.MeetingImpl;
 
@@ -19,6 +18,8 @@ import impl.MeetingImpl;
 
 public class FutureMeetingImpl extends MeetingImpl implements FutureMeeting, Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @see impl.MeetingImpl
 	 * @param id the id of the meeting

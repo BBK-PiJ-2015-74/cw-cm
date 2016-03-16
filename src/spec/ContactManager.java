@@ -160,4 +160,38 @@ public interface ContactManager {
      * closed and when/if the user requests it.
      */
     void flush();
+    
+    /**
+     * Increases the contactId by one when a contact is added to the ContactManager.
+     */
+	void updateContactId();
+
+	/**
+     * Increases the meetingId by one when a contact is added to the ContactManager.
+     */
+	void updateMeetingId();
+
+	/**
+	 * Returns the id of the contact
+	 * @return the id of the contact
+	 */
+	int getContactId();
+	
+	/**
+	 * Returns the id of the meeting
+	 * @return the id of the meeting
+	 */
+	int getMeetingId();
+
+	/**
+	 * Returns the list of meetings in the ContactManager
+	 * @return meetings in the ContactManager of type List<Meeting>
+	 */
+	List<Meeting> getMeetings();
+	
+	/**
+	 * Returns the list of contacts in the ContactManager
+	 * @return contacts in the ContactManager of type Set<Contact>
+	 */
+	Set<Contact> getContacts();
 }

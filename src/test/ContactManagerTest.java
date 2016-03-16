@@ -1,8 +1,8 @@
 package test;
 
-import spec.*;
 import impl.ContactManagerImpl;
 import impl.ContactImpl;
+import spec.*;
 import test.TestData;
 import java.util.Set;
 import java.util.Calendar;
@@ -22,6 +22,8 @@ import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Before;
@@ -64,14 +66,14 @@ public class ContactManagerTest {
 	    	 ioEx.printStackTrace();
 	     }
 	     
-	     //Create a fresh ContactManagerImpl
-	     ContactManager cm = new ContactManagerImpl();
+	    //Create a fresh ContactManagerImpl
+	    ContactManager cm = new ContactManagerImpl();
 		
 		//Create a set of contacts
-	     Set<Contact> contactSet = new HashSet<>();
-	    contactSet.add(TestData.contact1);
-	    contactSet.add(TestData.contact2);
-	    contactSet.add(TestData.contact3);
+	    Set<Contact> contactSet = new HashSet<>();
+	    //contactSet.add(TestData.contact1);
+	    //contactSet.add(TestData.contact2);
+	    //contactSet.add(TestData.contact3);
 		
 	}
 
@@ -82,11 +84,32 @@ public class ContactManagerTest {
 	@Test
 	public void testContactManagerConstructor() {
 		ContactManager cm = new ContactManagerImpl();
-		assertEquals(contactId, -1);
-		assertEquals(meetingId, -1);
-		assertNull(cmContacts);
-		assertNull(cmMeetings);
+		assertEquals(cm.getContactId(), -1);
+		assertEquals(cm.getMeetingId(), -1);
+		assertTrue(cm.getContacts().isEmpty());
+		assertTrue(cm.getMeetings().isEmpty());
 	}
+	
+	/**
+	 * Test counter for contactId
+	 */
+	@Test
+	public void testUpdateContactId() {
+		ContactManager cm = new ContactManagerImpl();
+		cm.updateContactId();
+		assertEquals (cm.getContactId(), 1);
+	}
+	
+	/**
+	 * Test counter for meetingId
+	 */
+	@Test
+	public void testUpdateMeetingId() {
+		ContactManager cm = new ContactManagerImpl();
+		cm.updateMeetingId();
+		assertEquals (cm.getMeetingId(), 1);
+	}
+	
 	
 	@Test
 	public void testUpdateContactManagerFile() {

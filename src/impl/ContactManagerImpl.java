@@ -11,8 +11,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,8 +34,6 @@ public class ContactManagerImpl implements ContactManager {
 
 	public ContactManagerImpl() {
 		
-		contactId = -1;
-		meetingId = -1;
 		readContactManagerFile();
 		// Constructor to add, must allow file to be read at start-up and recover data from previous session
 	}
@@ -118,8 +117,9 @@ public class ContactManagerImpl implements ContactManager {
 	}
 	
 	/**
-	 * This method checks whether a file already exists of contacts and meetings for the ContactManager to use
-	 * If not, a file is created
+	 * This method checks whether a file already exists of contacts and meetings for the ContactManager to use, and 
+	 * read from the file. If not, a file is created.
+	 * Variables meetingId, contactId, cmContacts, cmMeetings and cmDate are initialized.
 	 */
 	@SuppressWarnings("unchecked")
 	public void readContactManagerFile() {
@@ -127,19 +127,25 @@ public class ContactManagerImpl implements ContactManager {
 	    	 Path p = FileSystems.getDefault().getPath(FILENAME);
 	         if (Files.exists(p)) {
 	        	 try {
-	        		 ObjectInputStream s = new ObjectInputStream 
+	        		 ObjectInputStream objectIn = new ObjectInputStream 
 	        				 						(new BufferedInputStream
 	        				 								(new FileInputStream(FILENAME)));
-	        		 cmMeetings = (List<Meeting>) s.readObject();
-	        		 cmContacts = (Set<Contact>) s.readObject();
-	        		 contactId = (int) s.readObject();
-	        		 meetingId = (int) s.readObject();
-	        		 cmDate = (Calendar) s.readObject();
-	           
+	        		 cmMeetings = (List<Meeting>) objectIn.readObject();
+	        		 cmContacts = (Set<Contact>) objectIn.readObject();
+	        		 contactId = (int) objectIn.readObject();
+	        		 meetingId = (int) objectIn.readObject();
+	        		 cmDate = (Calendar) objectIn.readObject();
+	        		 objectIn.close();
 	        	 } catch (IOException | ClassNotFoundException e) {
 	        		 e.printStackTrace();
-	        	 }
-	        }
+	        	 }	 
+	         } else {
+	        	 meetingId = -1;
+	        	 contactId = -1;
+	        	 cmContacts = new HashSet<>();
+	        	 cmMeetings = new ArrayList<>();
+	        	 cmDate = Calendar.getInstance();
+	         }
 	      }
 
 } // end of class	

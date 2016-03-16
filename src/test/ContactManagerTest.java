@@ -20,7 +20,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.After;
 import org.junit.Before;
@@ -79,8 +80,12 @@ public class ContactManagerTest {
 	}
 
 	@Test
-	public void testContactManagerFileCreatedifNotExists() {
-		assertTrue(cmFile.exists());
+	public void testContactManagerConstructor() {
+		ContactManager cm = new ContactManagerImpl();
+		assertEquals(contactId, -1);
+		assertEquals(meetingId, -1);
+		assertNull(cmContacts);
+		assertNull(cmMeetings);
 	}
 	
 	@Test

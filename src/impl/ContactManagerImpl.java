@@ -37,7 +37,50 @@ public class ContactManagerImpl implements ContactManager {
 		readContactManagerFile();
 		// Constructor to add, must allow file to be read at start-up and recover data from previous session
 	}
-
+	
+	/**
+	 * @see spec.ContactManager#getContactId()
+	 */
+	public int getContactId() {
+		return contactId;
+	}
+	
+	/**
+	 * @see spec.ContactManager#getMeetingId()
+	 */
+	public int getMeetingId() {
+		return meetingId;
+	}
+	
+	/** 
+	 * @see spec.ContactManager#getContacts()
+	 */
+	public Set<Contact> getContacts() {
+		return cmContacts;
+	}
+	
+	/** 
+	 * @see spec.ContactManager#getMeetings()
+	 */
+	public List<Meeting> getMeetings() {
+		return cmMeetings;
+	}
+	
+	/**
+	 * @see spec.ContactManager#updateContactId()
+	 */
+	public void updateContactId() {
+		contactId = (contactId == -1) ? 1 : contactId++;
+	}
+	
+	/**
+	 * Method adds one to the id of the meeting. If the meetingId has just been initialised, it is set to 1.
+	 */
+	public void updateMeetingId() {
+		meetingId = (meetingId == -1) ? 1 : meetingId++;
+	}
+	
+	
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
 		// TODO Auto-generated method stub
@@ -122,7 +165,7 @@ public class ContactManagerImpl implements ContactManager {
 	 * Variables meetingId, contactId, cmContacts, cmMeetings and cmDate are initialized.
 	 */
 	@SuppressWarnings("unchecked")
-	public void readContactManagerFile() {
+	private void readContactManagerFile() {
 		
 	    	 Path p = FileSystems.getDefault().getPath(FILENAME);
 	         if (Files.exists(p)) {

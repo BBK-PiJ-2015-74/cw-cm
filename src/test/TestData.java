@@ -2,6 +2,8 @@ package test;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import impl.ContactImpl;
 import spec.Contact;
@@ -79,7 +81,12 @@ public class TestData {
     static Contact contact8 = new ContactImpl(CONTACT_ID_08, CONTACT_NAME_08, CONTACT_NOTES_08);
     static Contact contact9 = new ContactImpl(CONTACT_ID_09, CONTACT_NAME_09, CONTACT_NOTES_09);
     static Contact contact10 = new ContactImpl(CONTACT_ID_10, CONTACT_NAME_10, CONTACT_NOTES_10);
-}
+    
+
+	
+    
+    
+} // end of class
 	
 
 

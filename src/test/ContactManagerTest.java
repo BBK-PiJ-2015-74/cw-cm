@@ -39,23 +39,24 @@ public class ContactManagerTest {
 	private int contactId;
 	private int meetingId;
 	private Calendar cmDate;
-	private Set<Contact> cmContacts;
-	private List<Meeting> cmMeetings;
+	private Set<Contact> cmContacts, setOf2TestContacts, setOfInvalidContacts;
+	private List<Meeting> cmMeetings, cm5Meetings;
+	private ContactManager cm, cm5;
+	
 	
 	static final String FILENAME = "contacts.txt";
 	
 	final File cmFile = new File(FILENAME);
 	
+	
 	/**
 	 * Set up a clean ContactManager environment for each test
 	 */
-	@Before
+	@Before 
 	public void setUp() {
 		
 		//Set time to current system time
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		cmDate = Calendar.getInstance();
-		System.out.println(dateFormat.format(cmDate.getTime()));
 		
 		//Delete all data files if they exist
 	     try {
@@ -66,19 +67,28 @@ public class ContactManagerTest {
 	     } catch (IOException ioEx) {
 	    	 ioEx.printStackTrace();
 	     }
-	     
-	}
-	
-	//Create a set of contacts
-	@Before
-	public Set<Contact> createSetOf5TestContacts() {
-		Set<Contact> setOf5TestContacts = new HashSet<>();
-	    setOf5TestContacts.add(TestData.contact1);
-	    setOf5TestContacts.add(TestData.contact2);
-	    setOf5TestContacts.add(TestData.contact3);
-	    setOf5TestContacts.add(TestData.contact4);
-	    setOf5TestContacts.add(TestData.contact5);
-	    return setOf5TestContacts;
+	    
+	    //Create a test set of 2 contacts 
+	    setOf2TestContacts = new HashSet<>();
+		setOf2TestContacts.add(TestData.contact1);
+		setOf2TestContacts.add(TestData.contact4);
+		    
+		//Create a test set of 2 invalid contacts
+		setOfInvalidContacts = new HashSet<>();
+		
+		    
+		//Create a new ContactManager implementation
+		cm = new ContactManagerImpl();
+		
+		//Create a ContactManager implementation with 5 contacts
+		//NB. Need to implement addNewContact(name, notes) before tests using this method will pass
+		cm5 = new ContactManagerImpl();
+		cm5.addNewContact(TestData.CONTACT_NAME_01, TestData.CONTACT_NOTES_01);
+		cm5.addNewContact(TestData.CONTACT_NAME_02, TestData.CONTACT_NOTES_02);
+		cm5.addNewContact(TestData.CONTACT_NAME_03, TestData.CONTACT_NOTES_03);
+		cm5.addNewContact(TestData.CONTACT_NAME_04, TestData.CONTACT_NOTES_04);
+		cm5.addNewContact(TestData.CONTACT_NAME_05, TestData.CONTACT_NOTES_05);
+
 	}
 
 	@After
@@ -87,7 +97,6 @@ public class ContactManagerTest {
 
 	@Test
 	public void testContactManagerConstructor() {
-		ContactManager cm = new ContactManagerImpl();
 		assertEquals(cm.getContactId(), -1);
 		assertEquals(cm.getMeetingId(), -1);
 		assertTrue(cm.getContacts().isEmpty());
@@ -96,56 +105,49 @@ public class ContactManagerTest {
 	
 	@Test
 	public void testUpdateContactId() {
-		ContactManager cm = new ContactManagerImpl();
 		cm.updateContactId();
 		assertEquals (cm.getContactId(), 1);
 	}
 	
 	@Test
 	public void testUpdateMeetingId() {
-		ContactManager cm = new ContactManagerImpl();
 		cm.updateMeetingId();
 		assertEquals (cm.getMeetingId(), 1);
 	}
 	
 	@Test (expected = NullPointerException.class)
-	public void addFutureMeetingNullContactsShouldThrow() {
-		ContactManager cm = new ContactManagerImpl();
-		cm.addFutureMeeting(null, TestData.FUTURE_DATE_02);
+	public void addFutureMeetingNullContactsThrowsException() {
+		cm5.addFutureMeeting(null, TestData.FUTURE_DATE_02);
 	}
 		
 	@Test (expected = NullPointerException.class)
-	public void addFutureMeetingNullDateShouldThrow() {
-		ContactManager cm = new ContactManagerImpl();
-		cm.addFutureMeeting(setOf5TestContacts, null);
+	public void addFutureMeetingNullDateThrowsException() {
+		cm.addFutureMeeting(setOf2TestContacts, null);
+		cm5.addFutureMeeting(setOf2TestContacts, null);
 	}
 	
 	@Test (expected = NullPointerException.class)
-	public void addFutureMeetingNullFutureMeetingShouldThrow() {
-		ContactManager cm = new ContactManagerImpl();
-		cm.addFutureMeeting(null, null);
+	public void addFutureMeetingNullFutureMeetingThrowsException() {
+		cm5.addFutureMeeting(null, null);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
-	public void addFutureMeetingPastDateShouldThrow() {
-		ContactManager cm = new ContactManagerImpl();
-		cm.addFutureMeeting(setOf5TestContacts, TestData.PAST_DATE_03);
+	public void addFutureMeetingPastDateThrowsException() {
+		cm5.addFutureMeeting(setOf2TestContacts, TestData.PAST_DATE_03);
 	}
 	
+	//Need to implement set of invalid contacts - this test passes but invalid contacts not implemented
 	@Test (expected = IllegalArgumentException.class)
-	public void addFutureMeetingInvalidContactsShouldThrow() {
-		ContactManager cm = new ContactManagerImpl();
-		cm.addFutureMeeting(invalidTestContacts, TestData.FUTURE_DATE_01);
-		//Need to implement set of invalid contacts
+	public void addFutureMeetingInvalidContactsThrowsException() {
+		cm5.addFutureMeeting(setOfInvalidContacts, TestData.FUTURE_DATE_01);
+		
 	}
 	
-	@Test
-	public void addFutureMeeting3MeetingsReturnsId3() {
-		ContactManager cm = new ContactManagerImpl();
-		cm.addFutureMeeting(setOf5TestContacts,TestData.FUTURE_DATE_01);
-		cm.addFutureMeeting(setOf5TestContacts,TestData.FUTURE_DATE_02);
-		cm.addFutureMeeting(setOf5TestContacts,TestData.FUTURE_DATE_03);
-		assertEquals(cm.getMeetingId(), 3);
+	@Test //This test won't pass until addNewContact() is implemented
+	public void add3FutureMeetingsReturnsCorrectID() {
+		assertTrue(cm5.addFutureMeeting(setOf2TestContacts,TestData.FUTURE_DATE_01) == 1);
+		assertTrue(cm5.addFutureMeeting(setOf2TestContacts,TestData.FUTURE_DATE_02) == 2);
+		assertTrue(cm5.addFutureMeeting(setOf2TestContacts,TestData.FUTURE_DATE_03) == 3);
 	}
 	
 	@Test

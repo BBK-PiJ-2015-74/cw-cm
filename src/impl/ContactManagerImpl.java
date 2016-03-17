@@ -15,13 +15,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
-import spec.Contact;
-import spec.ContactManager;
-import spec.FutureMeeting;
-import spec.Meeting;
-import spec.PastMeeting;
+import spec.*;
+import impl.*;
 
 public class ContactManagerImpl implements ContactManager {
 	
@@ -80,13 +78,33 @@ public class ContactManagerImpl implements ContactManager {
 		meetingId = (meetingId == -1) ? 1 : meetingId++;
 	}
 	
-	
+	/**
+	 * @see spec.ContactManager#addFutureMeeting
+	 */
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		Objects.requireNonNull(contacts);
+		Objects.requireNonNull(date);
+		
+		if (date.before(Calendar.getInstance())) {
+			throw new IllegalArgumentException("A future meeting cannot be held in the past. Please check date"); 
+		}
+		
+		if (validateContacts(contacts) == false) {
+			throw new IllegalArgumentException("Contact not in Contact Manager. Please add contact first");
+		}
+		
+		updateMeetingId(); // set meetingId to 1 for the first meeting, or add 1 if adding a meeting at the end of the list
+		FutureMeeting futureMeetingToAdd = new FutureMeetingImpl(meetingId, date, contacts);
+		Objects.requireNonNull(futureMeetingToAdd);
+		cmMeetings.add(futureMeetingToAdd);
+		return meetingId;
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public PastMeeting getPastMeeting(int id) {
 		// TODO Auto-generated method stub
@@ -189,6 +207,14 @@ public class ContactManagerImpl implements ContactManager {
 	        	 cmMeetings = new ArrayList<>();
 	        	 cmDate = Calendar.getInstance();
 	         }
-	      }
+	}
+	
+	/**
+	 * Check whether a contact is unknown or non-existent
+	 */
+	private boolean validateContacts(Set<Contact> contacts) {
+		return (cmContacts.containsAll(contacts))? true : false;
+	}
+		
 
 } // end of class	

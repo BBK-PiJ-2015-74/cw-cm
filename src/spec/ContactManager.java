@@ -163,14 +163,16 @@ public interface ContactManager {
     
     /**
      * Increases the contactId by one when a contact is added to the ContactManager.
+     * @return the id of the added Contact
      */
-	void updateContactId();
+	int updateContactId();
 
 	/**
      * Increases the meetingId by one when a contact is added to the ContactManager.
+	 * @return the Id of the added Meeting
      */
-	void updateMeetingId();
-
+	int updateMeetingId();
+	
 	/**
 	 * Returns the id of the contact
 	 * @return the id of the contact

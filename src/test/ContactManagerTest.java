@@ -36,16 +36,14 @@ public class ContactManagerTest {
 	// ContactManager keeps track of contacts, past and future meetings
 	// When the application is closed, all data must be stored in a text file called contacts.txt, or can use XML, etc
 	// This file must be read at start-up to recover all data introduced in a former session
+	
 	private int contactId;
 	private int meetingId;
 	private Calendar cmDate;
 	private Set<Contact> cmContacts, setOf2TestContacts, setOfInvalidContacts;
 	private List<Meeting> cmMeetings, cm5Meetings;
 	private ContactManager cm, cm5;
-	
-	
 	static final String FILENAME = "contacts.txt";
-	
 	final File cmFile = new File(FILENAME);
 	
 	//--------------------------------Set Up -------------------------------------------
@@ -78,11 +76,10 @@ public class ContactManagerTest {
 		setOfInvalidContacts = new HashSet<>();
 		
 		    
-		//Create a new ContactManager implementation
+		//Create a new empty ContactManager implementation with no contacts or meetings
 		cm = new ContactManagerImpl();
 		
 		//Create a ContactManager implementation with 5 contacts
-		//NB. Need to implement addNewContact(name, notes) before tests using this method will pass
 		cm5 = new ContactManagerImpl();
 		cm5.addNewContact(TestData.CONTACT_NAME_01, TestData.CONTACT_NOTES_01);
 		cm5.addNewContact(TestData.CONTACT_NAME_02, TestData.CONTACT_NOTES_02);
@@ -100,8 +97,8 @@ public class ContactManagerTest {
 	
 	@Test
 	public void testContactManagerConstructor() {
-		assertEquals(cm.getContactId(), -1);
-		assertEquals(cm.getMeetingId(), -1);
+		assertEquals(cm.getContactId(), 0);
+		assertEquals(cm.getMeetingId(), 0);
 		assertTrue(cm.getContacts().isEmpty());
 		assertTrue(cm.getMeetings().isEmpty());
 	}
@@ -109,13 +106,15 @@ public class ContactManagerTest {
 	@Test
 	public void testUpdateContactId() {
 		cm.updateContactId();
-		assertEquals (cm.getContactId(), 1);
+		cm.updateContactId();
+		assertEquals (cm.getContactId(), 2);
 	}
 	
 	@Test
 	public void testUpdateMeetingId() {
 		cm.updateMeetingId();
-		assertEquals (cm.getMeetingId(), 1);
+		cm.updateMeetingId();
+		assertEquals (cm.getMeetingId(), 2);
 	}
 	
 	@Test
@@ -154,6 +153,7 @@ public class ContactManagerTest {
 	}
 	
 	@Test //This test won't pass until addNewContact() is implemented
+	// Still not working - come back to it ... maybe need to implement getContacts(String name) first
 	public void add3FutureMeetingsReturnsCorrectID() {
 		assertTrue(cm5.addFutureMeeting(setOf2TestContacts,TestData.FUTURE_DATE_01) == 1);
 		assertTrue(cm5.addFutureMeeting(setOf2TestContacts,TestData.FUTURE_DATE_02) == 2);

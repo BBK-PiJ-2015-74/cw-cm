@@ -68,15 +68,15 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see spec.ContactManager#updateContactId()
 	 */
 	public int updateContactId() {
-		contactId = (contactId == -1) ? 1 : contactId++;
+		contactId++;
 		return contactId;
 	}
 	
 	/**
-	 * Method adds one to the id of the meeting. If the meetingId has just been initialised, it is set to 1.
+	 * Method adds one to the id of the meeting.
 	 */
 	public int updateMeetingId() {
-		meetingId = (meetingId == -1) ? 1 : meetingId++;
+		meetingId++;
 		return meetingId;
 	}
 	
@@ -213,8 +213,8 @@ public class ContactManagerImpl implements ContactManager {
 	        		 e.printStackTrace();
 	        	 }	 
 	         } else {
-	        	 meetingId = -1;
-	        	 contactId = -1;
+	        	 meetingId = 0;
+	        	 contactId = 0;
 	        	 cmContacts = new HashSet<>();
 	        	 cmMeetings = new ArrayList<>();
 	        	 cmDate = Calendar.getInstance();

@@ -57,11 +57,12 @@ public class ContactManagerMain {
 				
 				//Create a ContactManager implementation with 5 contacts
 				ContactManager cm5 = new ContactManagerImpl();
-				cm5.addNewContact(TestData.CONTACT_NAME_01, TestData.CONTACT_NOTES_01);
-				cm5.addNewContact(TestData.CONTACT_NAME_02, TestData.CONTACT_NOTES_02);
-				cm5.addNewContact(TestData.CONTACT_NAME_03, TestData.CONTACT_NOTES_03);
-				cm5.addNewContact(TestData.CONTACT_NAME_04, TestData.CONTACT_NOTES_04);
-				cm5.addNewContact(TestData.CONTACT_NAME_05, TestData.CONTACT_NOTES_05);
+				System.out.println("Printing the ids of the contacts added");
+				System.out.println(cm5.addNewContact(TestData.CONTACT_NAME_01, TestData.CONTACT_NOTES_01));
+				System.out.println(cm5.addNewContact(TestData.CONTACT_NAME_02, TestData.CONTACT_NOTES_02));
+				System.out.println(cm5.addNewContact(TestData.CONTACT_NAME_03, TestData.CONTACT_NOTES_03));
+				System.out.println(cm5.addNewContact(TestData.CONTACT_NAME_04, TestData.CONTACT_NOTES_04));
+				System.out.println(cm5.addNewContact(TestData.CONTACT_NAME_05, TestData.CONTACT_NOTES_05));
 				
 				int FM1 = cm5.addFutureMeeting(setOf2TestContacts, TestData.FUTURE_DATE_03);
 				

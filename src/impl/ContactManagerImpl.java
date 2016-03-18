@@ -26,8 +26,8 @@ public class ContactManagerImpl implements ContactManager {
 	private int contactId;
 	private int meetingId;
 	private Calendar cmDate; // the date of the Contact Manager
-	private Set<Contact> cmContacts; // the contacts that already exist
-	private List<Meeting> cmMeetings; //the meetings that already exist
+	private Set<Contact> cmContacts; // the contacts added and that already exist
+	private List<Meeting> cmMeetings; //the meetings added and that already exist
 	private static final String FILENAME = "contacts.txt";
 
 	public ContactManagerImpl() {
@@ -67,15 +67,17 @@ public class ContactManagerImpl implements ContactManager {
 	/**
 	 * @see spec.ContactManager#updateContactId()
 	 */
-	public void updateContactId() {
+	public int updateContactId() {
 		contactId = (contactId == -1) ? 1 : contactId++;
+		return contactId;
 	}
 	
 	/**
 	 * Method adds one to the id of the meeting. If the meetingId has just been initialised, it is set to 1.
 	 */
-	public void updateMeetingId() {
+	public int updateMeetingId() {
 		meetingId = (meetingId == -1) ? 1 : meetingId++;
+		return meetingId;
 	}
 	
 	/**
@@ -95,7 +97,7 @@ public class ContactManagerImpl implements ContactManager {
 			throw new IllegalArgumentException("Contact not in Contact Manager. Please add contact first");
 		}
 		
-		updateMeetingId(); // set meetingId to 1 for the first meeting, or add 1 if adding a meeting at the end of the list
+		int meetingId = updateMeetingId(); // set meetingId to 1 for the first meeting, or add 1 if adding a meeting at the end of the list
 		FutureMeeting futureMeetingToAdd = new FutureMeetingImpl(meetingId, date, contacts);
 		Objects.requireNonNull(futureMeetingToAdd);
 		cmMeetings.add(futureMeetingToAdd);
@@ -153,10 +155,20 @@ public class ContactManagerImpl implements ContactManager {
 		return null;
 	}
 
+	/**
+	 * @see spec.ContactManager#addNewContact 
+	 */
 	@Override
 	public int addNewContact(String name, String notes) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		Objects.requireNonNull(name);
+		Objects.requireNonNull(notes);
+		if (name.equals("")|| notes.equals("")) throw new IllegalArgumentException("Please enter a name and notes for the contact");
+		
+		int id = updateContactId(); // set contactId to 1 for the first meeting, or add 1 if adding a contact within the set
+		Contact newContact = new ContactImpl(id, name, notes);
+		cmContacts.add(newContact);
+		return id;
 	}
 
 	@Override

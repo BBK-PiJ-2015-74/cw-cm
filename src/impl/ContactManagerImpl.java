@@ -171,10 +171,26 @@ public class ContactManagerImpl implements ContactManager {
 		return id;
 	}
 
+	/**
+	 * @see spec.ContactManager#getContacts(String name)
+	 * @throws NullPointerException if the name passed as parameter is null
+	 * This method creates a new set called searchResults
+	 * It iterates over the set looking for the specified string converted to lower case
+	 * Once the name is returned, a new contact with the specified id, name and notes is
+	 * added to the searchResults set
+	 */
 	@Override
 	public Set<Contact> getContacts(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Objects.requireNonNull(name);
+		Set<Contact> searchResults = new HashSet<>();
+		
+		for (Contact c : cmContacts) {
+			if (c.getName().toLowerCase().contains(name.toLowerCase())) {
+				searchResults.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
+			}	
+		}
+		return searchResults;
 	}
 
 	@Override

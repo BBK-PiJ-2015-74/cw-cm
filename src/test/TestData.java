@@ -14,9 +14,9 @@ import spec.Contact;
  *
  */
 
-public class TestData {
+public final class TestData {
 
-	public TestData() {
+	private TestData() {
 	}
 	
 	static final int CONTACT_ID_01 = 1;
@@ -54,6 +54,19 @@ public class TestData {
 	static final String CONTACT_NOTES_10 = "Foiled by the big bad mouse";
 	static final String EMPTY_CONTACT_NOTES = "";
 	
+	static final String NULL_SEARCH_STRING = null;
+	
+	static final Contact CONTACT1 = new ContactImpl(CONTACT_ID_01, CONTACT_NAME_01, CONTACT_NOTES_01);
+    static final Contact CONTACT2 = new ContactImpl(CONTACT_ID_02, CONTACT_NAME_02, CONTACT_NOTES_02);
+    static final Contact CONTACT3 = new ContactImpl(CONTACT_ID_03, CONTACT_NAME_03, CONTACT_NOTES_03);
+    static final Contact CONTACT4 = new ContactImpl(CONTACT_ID_04, CONTACT_NAME_04, CONTACT_NOTES_04);
+    static final Contact CONTACT5 = new ContactImpl(CONTACT_ID_05, CONTACT_NAME_05, CONTACT_NOTES_05);
+    static final Contact CONTACT6 = new ContactImpl(CONTACT_ID_06, CONTACT_NAME_06, CONTACT_NOTES_06);
+    static final Contact CONTACT7 = new ContactImpl(CONTACT_ID_07, CONTACT_NAME_07, CONTACT_NOTES_07);
+    static final Contact CONTACT8 = new ContactImpl(CONTACT_ID_08, CONTACT_NAME_08, CONTACT_NOTES_08);
+    static final Contact CONTACT9 = new ContactImpl(CONTACT_ID_09, CONTACT_NAME_09, CONTACT_NOTES_09);
+    static final Contact CONTACT10 = new ContactImpl(CONTACT_ID_10, CONTACT_NAME_10, CONTACT_NOTES_10);
+   
 	static final int MEETING_ID_01 = 1;
 	static final int MEETING_ID_02 = 2;
 	static final int MEETING_ID_03 = 3;
@@ -72,21 +85,14 @@ public class TestData {
 	static final Calendar PAST_DATE_01 = new GregorianCalendar(2015,3,10);
 	static final Calendar PAST_DATE_02 = new GregorianCalendar(2015,12,05);
 	static final Calendar PAST_DATE_03 = new GregorianCalendar(2016,1,11);	
-	
-	static Contact contact1 = new ContactImpl(CONTACT_ID_01, CONTACT_NAME_01, CONTACT_NOTES_01);
-    static Contact contact2 = new ContactImpl(CONTACT_ID_02, CONTACT_NAME_02, CONTACT_NOTES_02);
-    static Contact contact3 = new ContactImpl(CONTACT_ID_03, CONTACT_NAME_03, CONTACT_NOTES_03);
-    static Contact contact4 = new ContactImpl(CONTACT_ID_04, CONTACT_NAME_04, CONTACT_NOTES_04);
-    static Contact contact5 = new ContactImpl(CONTACT_ID_05, CONTACT_NAME_05, CONTACT_NOTES_05);
-    static Contact contact6 = new ContactImpl(CONTACT_ID_06, CONTACT_NAME_06, CONTACT_NOTES_06);
-    static Contact contact7 = new ContactImpl(CONTACT_ID_07, CONTACT_NAME_07, CONTACT_NOTES_07);
-    static Contact contact8 = new ContactImpl(CONTACT_ID_08, CONTACT_NAME_08, CONTACT_NOTES_08);
-    static Contact contact9 = new ContactImpl(CONTACT_ID_09, CONTACT_NAME_09, CONTACT_NOTES_09);
-    static Contact contact10 = new ContactImpl(CONTACT_ID_10, CONTACT_NAME_10, CONTACT_NOTES_10);
-    
 
-	
-    
+	//Not used .... atm
+	public static Set<Contact> createSetof2TestContacts() {
+		Set<Contact> setOf2TestContacts = new HashSet<>();
+		setOf2TestContacts.add(CONTACT1); //Humpty Dumpty
+		setOf2TestContacts.add(CONTACT4); // Jack and Jill
+	    return setOf2TestContacts;
+	}
     
 } // end of class
 	

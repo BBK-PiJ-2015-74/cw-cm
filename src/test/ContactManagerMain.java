@@ -46,11 +46,11 @@ public class ContactManagerMain {
 			    
 			    //Create a test set of 2 contacts 
 			    setOf2TestContacts = new HashSet<>();
-				setOf2TestContacts.add(TestData.contact1);
-				setOf2TestContacts.add(TestData.contact4);
+				setOf2TestContacts.add(TestData.CONTACT1);
+				setOf2TestContacts.add(TestData.CONTACT4);
 				
-				System.out.println(TestData.contact1.getName());
-				System.out.println(TestData.contact4.getName());
+				System.out.println(TestData.CONTACT1.getName());
+				System.out.println(TestData.CONTACT4.getName());
 				    
 				//Create a new ContactManager implementation
 				ContactManager cm = new ContactManagerImpl();
@@ -63,6 +63,18 @@ public class ContactManagerMain {
 				System.out.println(cm5.addNewContact(TestData.CONTACT_NAME_03, TestData.CONTACT_NOTES_03));
 				System.out.println(cm5.addNewContact(TestData.CONTACT_NAME_04, TestData.CONTACT_NOTES_04));
 				System.out.println(cm5.addNewContact(TestData.CONTACT_NAME_05, TestData.CONTACT_NOTES_05));
+				
+				Set<Contact> contactSet = cm5.getContacts("Humpty");
+				
+				System.out.println(contactSet.size());
+				System.out.println(contactSet.toString());
+				System.out.println(cm5.getContacts().toString());
+				
+				if (contactSet.contains(TestData.CONTACT_NAME_01)) {
+					System.out.println("Search results contain Humpty");
+				} else {
+					System.out.println("Cannot find specified string");
+				}
 				
 				int FM1 = cm5.addFutureMeeting(setOf2TestContacts, TestData.FUTURE_DATE_03);
 				

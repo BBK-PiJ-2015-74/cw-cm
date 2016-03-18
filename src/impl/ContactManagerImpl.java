@@ -188,11 +188,18 @@ public class ContactManagerImpl implements ContactManager {
 		for (Contact c : cmContacts) {
 			if (c.getName().toLowerCase().contains(name.toLowerCase())) {
 				searchResults.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
-			}	
+			}
+			else if (name.equals("")) {
+				searchResults.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
+			}
 		}
 		return searchResults;
 	}
 
+	/**
+	 * @see spec.ContactManager#getContacts(int ... ids) {
+	 * @throws IllegalArgumentException if no IDs are provided or if any of the provided ids does not match a real contact
+	 */
 	@Override
 	public Set<Contact> getContacts(int... ids) {
 		// TODO Auto-generated method stub

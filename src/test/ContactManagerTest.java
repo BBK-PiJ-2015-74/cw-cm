@@ -218,16 +218,13 @@ public class ContactManagerTest {
 	@Test 
 	public void getContactsEmptySearchStringReturnsAllContacts() {
 		Set<Contact> contactSet =  cm5.getContacts("");
-		assertTrue(contactSet.contains(TestData.CONTACT1));
-		assertTrue(contactSet.contains(TestData.CONTACT2));
-		assertTrue(contactSet.contains(TestData.CONTACT3));
-		assertTrue(contactSet.contains(TestData.CONTACT4));
-		assertTrue(contactSet.contains(TestData.CONTACT5));
+		assertFalse(contactSet.isEmpty());
+		assertTrue(contactSet.size() == 5);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void getContactsNullSearchStringThrowsException() {
-		cm5.getContacts(TestData.NULL_SEARCH_STRING);
+		cm5.getContacts(NULL_SEARCH_STRING);
 	}
 
 	

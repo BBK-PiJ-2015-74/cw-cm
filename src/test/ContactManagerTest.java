@@ -48,6 +48,7 @@ public class ContactManagerTest {
 	
 	final File cmFile = new File(FILENAME);
 	
+	//--------------------------------Set Up -------------------------------------------
 	
 	/**
 	 * Set up a clean ContactManager environment for each test
@@ -94,7 +95,9 @@ public class ContactManagerTest {
 	@After
 	public void tearDown() {
 	}
-
+	
+	//---------------------------Test Constructor and initial methods ----------------------------
+	
 	@Test
 	public void testContactManagerConstructor() {
 		assertEquals(cm.getContactId(), -1);
@@ -114,6 +117,13 @@ public class ContactManagerTest {
 		cm.updateMeetingId();
 		assertEquals (cm.getMeetingId(), 1);
 	}
+	
+	@Test
+	public void testUpdateContactManagerFile() {
+		fail("Not yet implemented");
+	}
+	
+	//-------------------------Test addFutureMeeting-----------------------------------------------
 	
 	@Test (expected = NullPointerException.class)
 	public void addFutureMeetingNullContactsThrowsException() {
@@ -150,9 +160,36 @@ public class ContactManagerTest {
 		assertTrue(cm5.addFutureMeeting(setOf2TestContacts,TestData.FUTURE_DATE_03) == 3);
 	}
 	
+	//----------------------Test addNewContact------------------------------
+	
 	@Test
-	public void testUpdateContactManagerFile() {
-		fail("Not yet implemented");
+	public void addNewContactReturnsCorrectId() {
+		assertTrue(cm.addNewContact(TestData.CONTACT_NAME_07, TestData.CONTACT_NOTES_07) == 1);
+		assertTrue(cm.addNewContact(TestData.CONTACT_NAME_03, TestData.CONTACT_NOTES_03) == 2);
+		assertTrue(cm.addNewContact(TestData.CONTACT_NAME_05, TestData.CONTACT_NOTES_05) == 3);
+		assertTrue(cm.addNewContact(TestData.CONTACT_NAME_09, TestData.CONTACT_NOTES_09) == 4);
+		assertTrue(cm.addNewContact(TestData.CONTACT_NAME_10, TestData.CONTACT_NOTES_10) == 5);
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void addNewContactEmptyNameThrowsException() {
+		cm.addNewContact(TestData.EMPTY_CONTACT_NAME, TestData.CONTACT_NOTES_07);
+	}
+	
+	@Test (expected = IllegalArgumentException.class)
+	public void addNewContactEmptyNotesThrowsException() {
+		cm.addNewContact(TestData.CONTACT_NAME_04, TestData.EMPTY_CONTACT_NOTES);
 	}
 
+	@Test (expected = NullPointerException.class) 
+	public void addNewContactNullNameThrowsException() {
+		cm.addNewContact(null, TestData.CONTACT_NOTES_07);
+	}
+	
+	@Test (expected = NullPointerException.class) 
+	public void addNewContactNullNotesThrowsException() {
+		cm.addNewContact(TestData.CONTACT_NAME_04, null);
+	}
+	
+	
 }

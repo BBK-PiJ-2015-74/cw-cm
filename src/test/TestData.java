@@ -40,6 +40,7 @@ public class TestData {
 	static final String CONTACT_NAME_08 = "Wicked witch";
 	static final String CONTACT_NAME_09 = "Tom Kitten";
 	static final String CONTACT_NAME_10 = "The Gruffalo";
+	static final String EMPTY_CONTACT_NAME = "";
 	
 	static final String CONTACT_NOTES_01 = "He's a good egg";
 	static final String CONTACT_NOTES_02 = "The spider scared her";
@@ -51,6 +52,7 @@ public class TestData {
 	static final String CONTACT_NOTES_08 = "Green face, big chin, ugly nose";
 	static final String CONTACT_NOTES_09 = "Cute character of Beatrix Potter fame";
 	static final String CONTACT_NOTES_10 = "Foiled by the big bad mouse";
+	static final String EMPTY_CONTACT_NOTES = "";
 	
 	static final int MEETING_ID_01 = 1;
 	static final int MEETING_ID_02 = 2;

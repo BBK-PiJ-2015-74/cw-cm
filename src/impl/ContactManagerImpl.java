@@ -12,11 +12,13 @@ import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.*;
 
 import spec.*;
 import impl.*;
@@ -30,10 +32,8 @@ public class ContactManagerImpl implements ContactManager {
 	private List<Meeting> cmMeetings; //the meetings added and that already exist
 	private static final String FILENAME = "contacts.txt";
 
-	public ContactManagerImpl() {
-		
+	public ContactManagerImpl() {	
 		readContactManagerFile();
-		// Constructor to add, must allow file to be read at start-up and recover data from previous session
 	}
 	
 	/**
@@ -202,8 +202,13 @@ public class ContactManagerImpl implements ContactManager {
 	 */
 	@Override
 	public Set<Contact> getContacts(int... ids) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		IntStream instream = Arrays.stream(ids);
+		Set<Contact> contactStream = cmContacts.stream()
+				.filter(contact -> instream.anyMatch(id -> id == contact.getId()))
+				.collect(Collectors.toCollection(HashSet::new));
+		
+		return contactStream;
 	}
 
 	@Override

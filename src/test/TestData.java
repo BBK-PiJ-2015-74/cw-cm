@@ -6,12 +6,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import impl.ContactImpl;
+import impl.ContactManagerImpl;
 import spec.Contact;
+import spec.ContactManager;
 
 /**
  * A class which contains contacts, meetings, date and other data in static final form for testing purposes
- * @author BBK-PiJ-2015-74
- *
+ * @author BBK-PiJ-2015-74 lburge01
  */
 
 public final class TestData {
@@ -66,6 +67,10 @@ public final class TestData {
     static final Contact CONTACT8 = new ContactImpl(CONTACT_ID_08, CONTACT_NAME_08, CONTACT_NOTES_08);
     static final Contact CONTACT9 = new ContactImpl(CONTACT_ID_09, CONTACT_NAME_09, CONTACT_NOTES_09);
     static final Contact CONTACT10 = new ContactImpl(CONTACT_ID_10, CONTACT_NAME_10, CONTACT_NOTES_10);
+    
+    static final Contact INVALID_CONTACT1 = new ContactImpl(101, "Mickey Mouse", "Married to Minnie Mouse");
+    static final Contact INVALID_CONTACT2 = new ContactImpl(102, "Donald Duck", "Quack quack");
+    static final Contact INVALID_CONTACT3 = new ContactImpl(103, "Pluto the dog", "Goofy teeth");
    
 	static final int MEETING_ID_01 = 1;
 	static final int MEETING_ID_02 = 2;
@@ -85,15 +90,82 @@ public final class TestData {
 	static final Calendar PAST_DATE_01 = new GregorianCalendar(2015,3,10);
 	static final Calendar PAST_DATE_02 = new GregorianCalendar(2015,12,05);
 	static final Calendar PAST_DATE_03 = new GregorianCalendar(2016,1,11);	
-
-	//Not used .... atm
-	public static Set<Contact> createSetof2TestContacts() {
-		Set<Contact> setOf2TestContacts = new HashSet<>();
-		setOf2TestContacts.add(CONTACT1); //Humpty Dumpty
-		setOf2TestContacts.add(CONTACT4); // Jack and Jill
-	    return setOf2TestContacts;
+	
+	/**
+	 * Create empty and test ContactManager implementations for use in tests
+	 * @return emptyCM
+	 */
+	static ContactManager buildEmptyCM() {
+		ContactManager emptyCM = new ContactManagerImpl();
+		return emptyCM;
+	}
+	
+	/**
+	 * @return testCM
+	 */
+	static ContactManager buildTestCM() {
+		ContactManager testCM = new ContactManagerImpl();
+		testCM.addNewContact(CONTACT_NAME_01, CONTACT_NOTES_01); //NB. The ContactManager assigns the contact ID.
+		testCM.addNewContact(CONTACT_NAME_02, CONTACT_NOTES_02);
+		testCM.addNewContact(CONTACT_NAME_03, CONTACT_NOTES_03);
+		testCM.addNewContact(CONTACT_NAME_04, CONTACT_NOTES_04);
+		testCM.addNewContact(CONTACT_NAME_05, CONTACT_NOTES_05);
+		return testCM;
 	}
     
+	/**
+	 * Create sets of 2, 5 and 10 contacts for use in tests
+	 * @return set of 2 test contacts
+	 */
+	static Set<Contact> buildTwoContactSet() {
+		Set<Contact> twoContactSet = new HashSet<>();
+		twoContactSet.add(CONTACT1);
+		twoContactSet.add(CONTACT2);
+		return twoContactSet;
+	}
+	
+	/**
+	 * @return set of 5 test contacts
+	 */
+	static Set<Contact> buildFiveContactSet() {
+		Set<Contact> fiveContactSet = new HashSet<>();
+		fiveContactSet.add(CONTACT1);
+		fiveContactSet.add(CONTACT2);
+		fiveContactSet.add(CONTACT3);
+		fiveContactSet.add(CONTACT4);
+		fiveContactSet.add(CONTACT5);
+		return fiveContactSet;
+	}
+	
+	/**
+	 * @return set of 10 test contacts
+	 */
+	static Set<Contact> buildTenContactSet() {
+		Set<Contact> tenContactSet = new HashSet<>();
+		tenContactSet.add(CONTACT1);
+		tenContactSet.add(CONTACT2);
+		tenContactSet.add(CONTACT3);
+		tenContactSet.add(CONTACT4);
+		tenContactSet.add(CONTACT5);
+		tenContactSet.add(CONTACT6);
+		tenContactSet.add(CONTACT7);
+		tenContactSet.add(CONTACT8);
+		tenContactSet.add(CONTACT9);
+		tenContactSet.add(CONTACT10);
+		return tenContactSet;
+	}
+	
+	/**
+	 * @return invalid set of contacts which have not been added to a ContactManager
+	 */
+	static Set<Contact> buildInvalidContactSet() {
+		Set<Contact> invalidContactSet = new HashSet<>();
+		invalidContactSet.add(INVALID_CONTACT1);
+		invalidContactSet.add(INVALID_CONTACT2);
+		invalidContactSet.add(INVALID_CONTACT3);
+		return invalidContactSet;
+	}
+
 } // end of class
 	
 

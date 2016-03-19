@@ -36,35 +36,28 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * 
+ * @author BBK-PiJ-2015-74 lburge01
+ * A class to test ContactManagerImpl
+ * ContactManager keeps track of contacts, past and future meetings
+ */
+
 public class ContactManagerTest {
 	
-	// list fields needed for methods
-	// ContactManager keeps track of contacts, past and future meetings
-	// When the application is closed, all data must be stored in a text file called contacts.txt, or can use XML, etc
-	// This file must be read at start-up to recover all data introduced in a former session
-	
-	private int contactId;
-	private int meetingId;
-	private Calendar cmDate;
-	private Set<Contact> cmContacts, setOf2TestContacts, setOfInvalidContacts;
-	private List<Meeting> cmMeetings, cm5Meetings;
-	private ContactManager emptyCm, cm5;
 	static final String FILENAME = "contacts.txt";
 	final File cmFile = new File(FILENAME);
-	private Contact contact1;
+	private ContactManager emptyCM, testCM;
+	private Set<Contact> twoContactSet, fiveContactSet, tenContactSet, invalidContactSet;
 	
-	//--------------------------------Set Up -------------------------------------------
+	//--------------------------------Set Up -------------------------------------------------------------------------
 	
 	/**
-	 * Set up a clean ContactManager environment for each test
+	 * Set up a clean ContactManager environment for each test, test contact sets and delete data files if they exist
 	 */
 	@Before 
 	public void setUp() {
-		
-		//Set time to current system time
-		cmDate = Calendar.getInstance();
-		
-		//Delete all data files if they exist
+
 	     try {
 	    	 Path p = FileSystems.getDefault().getPath(FILENAME);
 	          if (Files.exists(p)) { 
@@ -73,25 +66,13 @@ public class ContactManagerTest {
 	     } catch (IOException ioEx) {
 	    	 ioEx.printStackTrace();
 	     }
-	    
-	    //Create a test set of 2 contacts 
-	    setOf2TestContacts = createSetof2TestContacts();
-	    
-		//Create a test set of 2 invalid contacts
-	    //** to do ***
-		setOfInvalidContacts = new HashSet<>();
-		
-		    
-		//Create a new empty ContactManager implementation with no contacts or meetings
-		emptyCm = new ContactManagerImpl();
-		
-		//Create a ContactManager implementation with 5 contacts
-		cm5 = new ContactManagerImpl();
-		cm5.addNewContact(CONTACT_NAME_01, CONTACT_NOTES_01);
-		cm5.addNewContact(CONTACT_NAME_02, CONTACT_NOTES_02);
-		cm5.addNewContact(CONTACT_NAME_03, CONTACT_NOTES_03);
-		cm5.addNewContact(CONTACT_NAME_04, CONTACT_NOTES_04);
-		cm5.addNewContact(CONTACT_NAME_05, CONTACT_NOTES_05);
+	     
+	     emptyCM = buildEmptyCM(); 
+	     testCM = buildTestCM();   
+	     twoContactSet = buildTwoContactSet();
+	     fiveContactSet = buildFiveContactSet();
+	     tenContactSet = buildTenContactSet();
+	     
 	}
 
 	@After
@@ -102,24 +83,24 @@ public class ContactManagerTest {
 	
 	@Test
 	public void testContactManagerConstructor() {
-		assertEquals(emptyCm.getContactId(), 0);
-		assertEquals(emptyCm.getMeetingId(), 0);
-		assertTrue(emptyCm.getContacts().isEmpty());
-		assertTrue(emptyCm.getMeetings().isEmpty());
+		assertEquals(emptyCM.getContactId(), 0);
+		assertEquals(emptyCM.getMeetingId(), 0);
+		assertTrue(emptyCM.getContacts().isEmpty());
+		assertTrue(emptyCM.getMeetings().isEmpty());
 	}
 	
 	@Test
 	public void testUpdateContactId() {
-		emptyCm.updateContactId();
-		emptyCm.updateContactId();
-		assertEquals (emptyCm.getContactId(), 2);
+		emptyCM.updateContactId();
+		emptyCM.updateContactId();
+		assertEquals (emptyCM.getContactId(), 2);
 	}
 	
 	@Test
 	public void testUpdateMeetingId() {
-		emptyCm.updateMeetingId();
-		emptyCm.updateMeetingId();
-		assertEquals (emptyCm.getMeetingId(), 2);
+		emptyCM.updateMeetingId();
+		emptyCM.updateMeetingId();
+		assertEquals (emptyCM.getMeetingId(), 2);
 	}
 	
 	@Test
@@ -127,105 +108,126 @@ public class ContactManagerTest {
 		fail("Not yet implemented");
 	}
 	
-	//-------------------------Test addFutureMeeting-----------------------------------------------
+	//-------------------------Test addFutureMeeting-------------------------------------------------------------------
 	
 	@Test (expected = NullPointerException.class)
 	public void addFutureMeetingNullContactsThrowsException() {
-		cm5.addFutureMeeting(null, FUTURE_DATE_02);
+		testCM.addFutureMeeting(null, FUTURE_DATE_02);
 	}
 		
 	@Test (expected = NullPointerException.class)
 	public void addFutureMeetingNullDateThrowsException() {
-		emptyCm.addFutureMeeting(setOf2TestContacts, null);
-		cm5.addFutureMeeting(setOf2TestContacts, null);
+		emptyCM.addFutureMeeting(twoContactSet, null);
+		testCM.addFutureMeeting(twoContactSet, null);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void addFutureMeetingNullFutureMeetingThrowsException() {
-		cm5.addFutureMeeting(null, null);
+		testCM.addFutureMeeting(null, null);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void addFutureMeetingPastDateThrowsException() {
-		cm5.addFutureMeeting(setOf2TestContacts, PAST_DATE_03);
+		testCM.addFutureMeeting(twoContactSet, PAST_DATE_03);
 	}
 	
-	//Need to implement set of invalid contacts - this test passes but invalid contacts not implemented
 	@Test (expected = IllegalArgumentException.class)
 	public void addFutureMeetingInvalidContactsThrowsException() {
-		cm5.addFutureMeeting(setOfInvalidContacts, FUTURE_DATE_01);
-		
+		testCM.addFutureMeeting(invalidContactSet, FUTURE_DATE_01);
 	}
 	
-	@Test //This test won't pass until addNewContact() is implemented
-	// Still not working - come back to it ... maybe need to implement getContacts(String name) first
+	@Test 
 	public void add3FutureMeetingsReturnsCorrectID() {
-		assertTrue(cm5.addFutureMeeting(setOf2TestContacts,FUTURE_DATE_01) == 1);
-		assertTrue(cm5.addFutureMeeting(setOf2TestContacts,FUTURE_DATE_02) == 2);
-		assertTrue(cm5.addFutureMeeting(setOf2TestContacts,FUTURE_DATE_03) == 3);
+		assertTrue(testCM.addFutureMeeting(fiveContactSet,FUTURE_DATE_01) == 1);
+		assertTrue(testCM.addFutureMeeting(fiveContactSet,FUTURE_DATE_02) == 2);
+		assertTrue(testCM.addFutureMeeting(fiveContactSet,FUTURE_DATE_03) == 3);
 	}
 	
-	//----------------------Test addNewContact------------------------------
+	//----------------------Test addNewContact-------------------------------------------------------------
 	
 	@Test
 	public void addNewContactReturnsCorrectId() {
-		assertTrue(emptyCm.addNewContact(TestData.CONTACT_NAME_07, TestData.CONTACT_NOTES_07) == 1);
-		assertTrue(emptyCm.addNewContact(TestData.CONTACT_NAME_03, TestData.CONTACT_NOTES_03) == 2);
-		assertTrue(emptyCm.addNewContact(TestData.CONTACT_NAME_05, TestData.CONTACT_NOTES_05) == 3);
-		assertTrue(emptyCm.addNewContact(TestData.CONTACT_NAME_09, TestData.CONTACT_NOTES_09) == 4);
-		assertTrue(emptyCm.addNewContact(TestData.CONTACT_NAME_10, TestData.CONTACT_NOTES_10) == 5);
+		assertTrue(testCM.addNewContact(CONTACT_NAME_06, CONTACT_NOTES_06) == 6);
+		assertTrue(testCM.addNewContact(CONTACT_NAME_07, CONTACT_NOTES_07) == 7);
+		assertTrue(testCM.addNewContact(CONTACT_NAME_08, CONTACT_NOTES_08) == 8);
+		assertTrue(testCM.addNewContact(CONTACT_NAME_09, CONTACT_NOTES_09) == 9);
+		assertTrue(testCM.addNewContact(CONTACT_NAME_10, CONTACT_NOTES_10) == 10);
+		assertTrue(testCM.getContacts("").size() == 10);
 	}
 	
+	/** 
+	 * @test This test checks the size of the contact set is zero before and after the addition of the contact
+	 */
 	@Test (expected = IllegalArgumentException.class)
-	public void addNewContactEmptyNameThrowsException() {
-		emptyCm.addNewContact(TestData.EMPTY_CONTACT_NAME, TestData.CONTACT_NOTES_07);
+	public void addNewContactEmptyNameThrowsException() {	
+		assertTrue(emptyCM.getContacts("").size()==0);
+		emptyCM.addNewContact(EMPTY_CONTACT_NAME, CONTACT_NOTES_07);
+		assertTrue(emptyCM.getContacts("").size()==0);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void addNewContactEmptyNotesThrowsException() {
-		emptyCm.addNewContact(TestData.CONTACT_NAME_04, TestData.EMPTY_CONTACT_NOTES);
+		assertTrue(emptyCM.getContacts("").size()==0);
+		emptyCM.addNewContact(CONTACT_NAME_04, EMPTY_CONTACT_NOTES);
+		assertTrue(emptyCM.getContacts("").size()==0);
 	}
 
 	@Test (expected = NullPointerException.class) 
 	public void addNewContactNullNameThrowsException() {
-		emptyCm.addNewContact(null, TestData.CONTACT_NOTES_07);
+		assertTrue(emptyCM.getContacts("").size()==0);
+		emptyCM.addNewContact(null, CONTACT_NOTES_07);
+		assertTrue(emptyCM.getContacts("").size()==0);
 	}
 	
 	@Test (expected = NullPointerException.class) 
 	public void addNewContactNullNotesThrowsException() {
-		emptyCm.addNewContact(TestData.CONTACT_NAME_04, null);
+		assertTrue(emptyCM.getContacts("").size()==0);
+		emptyCM.addNewContact(CONTACT_NAME_04, null);
+		assertTrue(emptyCM.getContacts("").size()==0);
 	}
 	
-	//------------------------Test getContacts -----------------------------------------------------
+	//------------------------Test getContacts(String name)-----------------------------------------------------
+	// assertTrue(contactSet.contains(CONTACT1)); this doesn't work, presumably because the object references are not the same?
 	
-	@Test //getContacts returns a set with all the contacts containing the specified string
-	public void getContactsReturnsContactSetContainingString() {
-		
+	@Test 
+	public void getContactsReturnsContactSetContainingString() {		
 		Set<Contact> contactSet = new HashSet<>();
-		contactSet = cm5.getContacts("Humpty");
+		contactSet = testCM.getContacts("Humpty");
 		assertFalse(contactSet.isEmpty());
 		assertTrue(contactSet.size() == 1);
-		
-		// assertTrue(contactSet.contains(CONTACT1)); this doesn't work, presumably because the object references are not the same?
-		
-		Set<Contact> contactSet2 = new HashSet<>();
-		contactSet2 = cm5.getContacts("Little"); // Little Bo Peep, Little Miss Muffett
-		assertFalse(contactSet2.isEmpty());
-		System.out.println(contactSet2.size());
-		assertTrue(contactSet2.size() == 2);
+	}
+	
+	@Test
+	public void getContactsReturnsTwoContactSetContainingString() {
+		Set<Contact> contactSet = new HashSet<>();
+		contactSet = testCM.getContacts("Little"); // Little Bo Peep, Little Miss Muffett
+		assertFalse(contactSet.isEmpty());
+		System.out.println(contactSet.size());
+		assertTrue(contactSet.size() == 2);
 	}
 
 	@Test 
 	public void getContactsEmptySearchStringReturnsAllContacts() {
-		Set<Contact> contactSet =  cm5.getContacts("");
+		Set<Contact> contactSet =  testCM.getContacts("");
 		assertFalse(contactSet.isEmpty());
 		assertTrue(contactSet.size() == 5);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void getContactsNullSearchStringThrowsException() {
-		cm5.getContacts(NULL_SEARCH_STRING);
+		Set<Contact> contactSet =  testCM.getContacts("");
+		assertTrue(contactSet.size() == 5);
+		testCM.getContacts(NULL_SEARCH_STRING);
 	}
 
+	//------------------------------Test getContacts(int... ids)-------------------------------------
+	
+	@Test
+	public void getContactsReturnsContactSetFromId() {
+		
+		Set<Contact> contactSet = new HashSet<>();
+		contactSet = testCM.getContacts(CONTACT_ID_01,CONTACT_ID_02,CONTACT_ID_03,CONTACT_ID_04,CONTACT_ID_05);
+		assertTrue(contactSet.size() == 5);
+	}
 	
 }

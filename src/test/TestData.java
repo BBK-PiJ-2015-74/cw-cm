@@ -74,17 +74,6 @@ public final class TestData {
     static final Contact INVALID_CONTACT1 = new ContactImpl(INVALID_ID_101, "Mickey Mouse", "Married to Minnie Mouse");
     static final Contact INVALID_CONTACT2 = new ContactImpl(INVALID_ID_102, "Donald Duck", "Quack quack");
     static final Contact INVALID_CONTACT3 = new ContactImpl(INVALID_ID_103, "Pluto the dog", "Goofy teeth");
-   
-	static final int MEETING_ID_01 = 1;
-	static final int MEETING_ID_02 = 2;
-	static final int MEETING_ID_03 = 3;
-	static final int MEETING_ID_04 = 4;
-	static final int MEETING_ID_05 = 5;
-	static final int MEETING_ID_06 = 6;
-	static final int MEETING_ID_07 = 7;
-	static final int MEETING_ID_08 = 8;
-	static final int MEETING_ID_09 = 9;
-	static final int MEETING_ID_10 = 10;
 	
 	static final Calendar TIME_NOW = Calendar.getInstance();
 	static final Calendar FUTURE_DATE_01 = new GregorianCalendar(2017,9,29);
@@ -93,6 +82,29 @@ public final class TestData {
 	static final Calendar PAST_DATE_01 = new GregorianCalendar(2015,3,10);
 	static final Calendar PAST_DATE_02 = new GregorianCalendar(2015,12,05);
 	static final Calendar PAST_DATE_03 = new GregorianCalendar(2016,1,11);	
+	
+	static final String PAST_MTG_NOTES_01 = "A solitary meeting involving a monologue";
+	static final String PAST_MTG_NOTES_02 = "Looney tunes, that's all Folks!";
+	static final String PAST_MTG_NOTES_03 = "A boardroom coup";
+	static final String PAST_MTG_NOTES_04 = "A nursery rhyme smorgasbord";
+	static final String PAST_MTG_NOTES_05 = "Too many cooks spoil the broth. We could have done it with half the people";
+	
+	static final int PAST_MTG_ID_01 = 1;
+	static final int PAST_MTG_ID_02 = 2;
+	static final int PAST_MTG_ID_03 = 3;
+	static final int PAST_MTG_ID_04 = 4;
+	static final int PAST_MTG_ID_05 = 5;
+	
+//	static final int MEETING_ID_01 = 1;
+//	static final int MEETING_ID_02 = 2;
+//	static final int MEETING_ID_03 = 3;
+//	static final int MEETING_ID_04 = 4;
+//	static final int MEETING_ID_05 = 5;
+//	static final int MEETING_ID_06 = 6;
+//	static final int MEETING_ID_07 = 7;
+//	static final int MEETING_ID_08 = 8;
+//	static final int MEETING_ID_09 = 9;
+//	static final int MEETING_ID_10 = 10;
 	
 	/**
 	 * Create empty and test ContactManager implementations for use in tests

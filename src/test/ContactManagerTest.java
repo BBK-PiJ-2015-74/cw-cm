@@ -2,6 +2,7 @@ package test;
 
 import impl.ContactManagerImpl;
 import impl.FutureMeetingImpl;
+import impl.PastMeetingImpl;
 import impl.ContactImpl;
 import spec.*;
 import static test.TestData.*;
@@ -48,7 +49,7 @@ public class ContactManagerTest {
 	static final String FILENAME = "contacts.txt";
 	final File cmFile = new File(FILENAME);
 	private ContactManager emptyCM, testCM;
-	private Set<Contact> singleContactSet, twoContactSet, fiveContactSet, tenContactSet, invalidContactSet;
+	private Set<Contact> emptyContactSet, singleContactSet, twoContactSet, fiveContactSet, tenContactSet, invalidContactSet;
 	
 	//--------------------------------Set Up -------------------------------------------------------------------------
 	
@@ -69,6 +70,7 @@ public class ContactManagerTest {
 	     
 	     emptyCM = buildEmptyCM(); // empty, no contacts
 	     testCM = buildTestCM();   // contains contacts 01, 02, 03, 04, 05
+	     emptyContactSet = new HashSet<>();
 	     singleContactSet = testCM.getContacts(CONTACT_ID_04);
 	     twoContactSet = testCM.getContacts(CONTACT_ID_01, CONTACT_ID_02);
 	     fiveContactSet = testCM.getContacts(CONTACT_ID_01, CONTACT_ID_02, CONTACT_ID_03, CONTACT_ID_04, CONTACT_ID_05);
@@ -235,7 +237,7 @@ public class ContactManagerTest {
 		emptyCM.getContacts(CONTACT_ID_02);
 	}
 	
-	//-------------------------Test addFutureMeeting-------------------------------------------------------------------
+	//-------------------------Test addFutureMeeting-------------------------------------------------------------------	
 	
 		@Test
 		public void addFutureMeetingReturnsCorrectID() {
@@ -269,7 +271,67 @@ public class ContactManagerTest {
 			testCM.addFutureMeeting(invalidContactSet, FUTURE_DATE_01);
 		}
 		
-	
+	//--------------------------Test addNewPastMeeting ------------------------------------------------------
+		
+		/**
+		 * Set up some past meetings to test
+		 * Test creating a new PastMeeting. Note this returns void rather than int, but must still update the meeting Id
+		 */
+		
+		@Test
+		public void addNewPastMeetingTest01() {
+			testCM.addNewPastMeeting(singleContactSet, PAST_DATE_01, PAST_MTG_NOTES_01);
+			PastMeeting pastMeeting01 = testCM.getPastMeeting(PAST_MTG_ID_01);
+			assertTrue(pastMeeting01.getId() == PAST_MTG_ID_01);
+			assertTrue(pastMeeting01.getDate() == PAST_DATE_01);
+			assertTrue(pastMeeting01.getContacts() == twoContactSet);
+			assertTrue(pastMeeting01.getNotes() == PAST_MTG_NOTES_01);
+		}
+		
+		@Test
+		public void addNewPastMeetingTest02() {
+			testCM.addNewPastMeeting(twoContactSet, PAST_DATE_02, PAST_MTG_NOTES_02);
+			PastMeeting pastMeeting02 = testCM.getPastMeeting(PAST_MTG_ID_02);
+			assertTrue(pastMeeting02.getId() == PAST_MTG_ID_02);
+			assertTrue(pastMeeting02.getDate() == PAST_DATE_02);
+			assertTrue(pastMeeting02.getContacts() == twoContactSet);
+			assertTrue(pastMeeting02.getNotes() == PAST_MTG_NOTES_02);
+		}
+		
+		@Test
+		public void addNewPastMeetingTest03() {
+			testCM.addNewPastMeeting(fiveContactSet, PAST_DATE_03, PAST_MTG_NOTES_03);
+			PastMeeting pastMeeting03 = testCM.getPastMeeting(PAST_MTG_ID_03);
+			assertTrue(pastMeeting03.getId() == PAST_MTG_ID_03);
+			assertTrue(pastMeeting03.getDate() == PAST_DATE_03);
+			assertTrue(pastMeeting03.getContacts() == fiveContactSet);
+			assertTrue(pastMeeting03.getNotes() == PAST_MTG_NOTES_03);
+		}
+		
+		@Test (expected = IllegalArgumentException.class)
+		public void addNewPastMeetingEmptyContactsThrowsException() {
+			testCM.addNewPastMeeting(emptyContactSet, PAST_DATE_01, PAST_MTG_NOTES_01);
+		}
+		
+		@Test (expected = IllegalArgumentException.class)
+		public void addNewPastMeetingInvalidContactsThrowsException() {
+			testCM.addNewPastMeeting(invalidContactSet, PAST_DATE_02, PAST_MTG_NOTES_02);
+		}
+		
+		@Test (expected = NullPointerException.class)
+		public void addNewPastMeetingNullContactsThrowsException() {
+			testCM.addNewPastMeeting(null, PAST_DATE_03, PAST_MTG_NOTES_03);
+		}
+		
+		@Test (expected = NullPointerException.class)
+		public void addNewPastMeetingNullDateThrowsException() {
+			testCM.addNewPastMeeting(twoContactSet, null, PAST_MTG_NOTES_03);
+		}
+		
+		@Test (expected = NullPointerException.class)
+		public void addNewPastMeetingNullNotesThrowsException() {
+			testCM.addNewPastMeeting(twoContactSet, PAST_DATE_01, null);
+		}
 		
 }
 

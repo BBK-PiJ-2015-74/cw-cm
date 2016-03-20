@@ -27,7 +27,7 @@ public abstract class MeetingImpl implements Meeting, Serializable {
 	 * Constructs a Meeting
 	 * @param meetingID the ID of the meeting (this class does not ensure uniqueness)
 	 * @param meetingDate the date of the meeting using the Gregorian Calendar (day, month, year)
-	 * @param meetingDelegates the Contacts for the people who attended the meeting - at least one
+	 * @param meetingContacts the Contacts for the people who attended the meeting - at least one
 	 * 
 	 * @throws NullPointerException if the date or contacts are null
 	 * @throws IllegalArgumentException if the meetingID is negative or zero
@@ -36,7 +36,7 @@ public abstract class MeetingImpl implements Meeting, Serializable {
 	private static final long serialVersionUID = 1L;
 	private int meetingID;
 	private Calendar meetingDate;
-	private Set<Contact> meetingDelegates;
+	private Set<Contact> meetingContacts;
 		
 	public MeetingImpl (int id, Calendar date, Set<Contact> contacts) {
 		if (id <=0 ) {
@@ -52,7 +52,7 @@ public abstract class MeetingImpl implements Meeting, Serializable {
 			
 		this.meetingID = id;
 		this.meetingDate = date;
-		this.meetingDelegates = contacts;
+		this.meetingContacts = contacts;
 		}
 		
 	/**
@@ -76,6 +76,6 @@ public abstract class MeetingImpl implements Meeting, Serializable {
 	 */
 		@Override
 		public Set<Contact> getContacts() {
-			return meetingDelegates;
+			return meetingContacts;
 		}
 	}

@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.*;
 
@@ -82,6 +83,9 @@ public class ContactManagerImpl implements ContactManager {
 	
 	/**
 	 * @see spec.ContactManager#addFutureMeeting
+	 * @throws IllegalArgumentException if the contact is not in the ContactManager
+	 * @throws IllegalArgumentException if the meeting is set for a time in the past
+	 * @throws NullPointerException if the contacts or date are null
 	 */
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
@@ -97,22 +101,36 @@ public class ContactManagerImpl implements ContactManager {
 			throw new IllegalArgumentException("Contact not in Contact Manager. Please add contact first");
 		}
 		
-		meetingId++;
-		FutureMeeting futureMeetingToAdd = new FutureMeetingImpl(meetingId, date, contacts);
-		Objects.requireNonNull(futureMeetingToAdd);
-		cmMeetings.add(futureMeetingToAdd);
+		meetingId = updateMeetingId();
+		FutureMeeting newFutureMeeting = new FutureMeetingImpl(meetingId, date, contacts);
+		Objects.requireNonNull(newFutureMeeting);
+		cmMeetings.add(newFutureMeeting);
 		return meetingId;
 	}
 
 	/**
-	 * 
+	 * @see spec.ContactManager#getPastMeeting(int id)
+	 * @throws IllegalStateException if there is a meeting with that Id happening in the future
 	 */
 	@Override
-	public PastMeeting getPastMeeting(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public PastMeeting getPastMeeting(int id) { // will there be only one meeting with the id, or will both FutureMeetings and PastMeetings have the same id??
+	
+		Stream<Meeting> meeting = cmMeetings.stream()
+				.filter(m -> m.getId() == id);
+		if (!(meeting instanceof PastMeeting)) throw new IllegalStateException("This meeting is not a past meeting");
+		return (PastMeeting) meeting;
 	}
+		
+//		ArrayList<Meeting> stream = cmMeetings.stream()
+//				.filter(m -> m.getId() == id)
+//				.findFirst();
+//		//Meeting foundmeeting = (Meeting) meeting;
+//		
+//		if (!(meeting instanceof PastMeeting)) throw new IllegalStateException();
+//		return (PastMeeting) meeting;
+//	}
 
+	
 	@Override
 	public FutureMeeting getFutureMeeting(int id) {
 		// TODO Auto-generated method stub
@@ -145,8 +163,19 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public void addNewPastMeeting(Set<Contact> contacts, Calendar date, String text) {
-		// TODO Auto-generated method stub
-
+		Objects.requireNonNull(contacts);
+		Objects.requireNonNull(date);
+		Objects.requireNonNull(text);
+		
+		cmDate = Calendar.getInstance();
+		
+		if (!cmContacts.containsAll(contacts)) throw new IllegalArgumentException("The contacts you entered do not exist in the ContactManager");
+		if (contacts.isEmpty()) throw new IllegalArgumentException("There must be at least one contact for the meeting");
+		if (date.after(cmDate)) throw new IllegalArgumentException("A past meeting cannot take place in the future");
+		
+		meetingId = updateMeetingId();
+		PastMeeting newPastMeeting = new PastMeetingImpl(meetingId, date, contacts, text);
+		cmMeetings.add(newPastMeeting);
 	}
 
 	@Override
@@ -262,13 +291,5 @@ public class ContactManagerImpl implements ContactManager {
 	        	 cmDate = Calendar.getInstance();
 	         }
 	}
-	
-	/**
-	 * Check whether a contact is unknown or non-existent
-	 */
-//	private boolean contactsAreNotInContactManager(Set<Contact> contacts) {
-//		return (!cmContacts.containsAll(contacts));
-//	}
-		
 
 } // end of class	

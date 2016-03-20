@@ -276,6 +276,7 @@ public class ContactManagerTest {
 		/**
 		 * Set up some past meetings to test
 		 * Test creating a new PastMeeting. Note this returns void rather than int, but must still update the meeting Id
+		 * None of the tests in this section will work unless getPastMeeting is implemented
 		 */
 		
 		@Test
@@ -284,7 +285,7 @@ public class ContactManagerTest {
 			PastMeeting pastMeeting01 = testCM.getPastMeeting(PAST_MTG_ID_01);
 			assertTrue(pastMeeting01.getId() == PAST_MTG_ID_01);
 			assertTrue(pastMeeting01.getDate() == PAST_DATE_01);
-			assertTrue(pastMeeting01.getContacts() == twoContactSet);
+			assertTrue(pastMeeting01.getContacts() == singleContactSet);
 			assertTrue(pastMeeting01.getNotes() == PAST_MTG_NOTES_01);
 		}
 		
@@ -332,6 +333,18 @@ public class ContactManagerTest {
 		public void addNewPastMeetingNullNotesThrowsException() {
 			testCM.addNewPastMeeting(twoContactSet, PAST_DATE_01, null);
 		}
+		
+		
+		//--------------------------------Test getPastMeeting------------------------------------------------
+		
+		@Test
+		public void getPastMeetingWithId() {
+			
+		}
+		
+		
+		
+		
 		
 }
 

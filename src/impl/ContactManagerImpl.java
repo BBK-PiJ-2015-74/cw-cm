@@ -93,11 +93,11 @@ public class ContactManagerImpl implements ContactManager {
 			throw new IllegalArgumentException("A future meeting cannot be held in the past. Please check date"); 
 		}
 		
-		if (validateContacts(contacts) == false) {
+		if (!cmContacts.containsAll(contacts)) {
 			throw new IllegalArgumentException("Contact not in Contact Manager. Please add contact first");
 		}
 		
-		int meetingId = updateMeetingId(); // set meetingId to 1 for the first meeting, or add 1 if adding a meeting at the end of the list
+		meetingId++;
 		FutureMeeting futureMeetingToAdd = new FutureMeetingImpl(meetingId, date, contacts);
 		Objects.requireNonNull(futureMeetingToAdd);
 		cmMeetings.add(futureMeetingToAdd);
@@ -183,17 +183,27 @@ public class ContactManagerImpl implements ContactManager {
 	public Set<Contact> getContacts(String name) {
 		
 		Objects.requireNonNull(name);
-		Set<Contact> searchResults = new HashSet<>();
-		
-		for (Contact c : cmContacts) {
-			if (c.getName().toLowerCase().contains(name.toLowerCase())) {
-				searchResults.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
-			}
-			else if (name.equals("")) {
-				searchResults.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
-			}
-		}
+		if (name.equals("")) {
+			return cmContacts.stream().collect(Collectors.toCollection(HashSet::new));
+		} else {
+			Set<Contact> searchResults = cmContacts.stream()
+				.filter(c -> c.getName().toLowerCase().contains(name.toLowerCase()))
+				.collect(Collectors.toCollection(HashSet::new));
 		return searchResults;
+	}
+		
+//		Objects.requireNonNull(name);
+//		Set<Contact> searchResults = new HashSet<>();
+//		
+//		for (Contact c : cmContacts) {
+//			if (c.getName().toLowerCase().contains(name.toLowerCase())) {
+//				searchResults.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
+//			}
+//			else if (name.equals("")) {
+//				searchResults.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
+//			}
+//		}
+//		return searchResults;
 	}
 
 	/**
@@ -201,12 +211,16 @@ public class ContactManagerImpl implements ContactManager {
 	 * @throws IllegalArgumentException if no IDs are provided or if any of the provided ids does not match a real contact
 	 */
 	@Override
-	public Set<Contact> getContacts(int... ids) {
+	public Set<Contact> getContacts(int... ids) { // int... ids means an array of ints
 		
-		IntStream instream = Arrays.stream(ids);
+		if (ids.length==0) throw new IllegalArgumentException("Please enter an id of the contact you wish to find");
+		
+		//IntStream instream = Arrays.stream(ids);
 		Set<Contact> contactStream = cmContacts.stream()
-				.filter(contact -> instream.anyMatch(id -> id == contact.getId()))
+				.filter(c -> Arrays.stream(ids).anyMatch(id -> id == c.getId()))
 				.collect(Collectors.toCollection(HashSet::new));
+		
+		if (contactStream.size() == 0) throw new IllegalArgumentException("The id you entered could not be found");
 		
 		return contactStream;
 	}
@@ -252,9 +266,9 @@ public class ContactManagerImpl implements ContactManager {
 	/**
 	 * Check whether a contact is unknown or non-existent
 	 */
-	private boolean validateContacts(Set<Contact> contacts) {
-		return (cmContacts.containsAll(contacts))? true : false;
-	}
+//	private boolean contactsAreNotInContactManager(Set<Contact> contacts) {
+//		return (!cmContacts.containsAll(contacts));
+//	}
 		
 
 } // end of class	

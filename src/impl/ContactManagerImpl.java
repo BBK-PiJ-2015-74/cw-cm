@@ -112,13 +112,24 @@ public class ContactManagerImpl implements ContactManager {
 	 * @see spec.ContactManager#getPastMeeting(int id)
 	 * @throws IllegalStateException if there is a meeting with that Id happening in the future
 	 */
+	//all meetings have a unique id whether FutureMeetings or PastMeetings
+	//The type of meeting is indicated by the date. i.e. meetings happening in a date > cmDate are FutureMeetings
+	// meetings happening on a date < cmDate are PastMeetings
 	@Override
-	public PastMeeting getPastMeeting(int id) { // will there be only one meeting with the id, or will both FutureMeetings and PastMeetings have the same id??
+	public PastMeeting getPastMeeting(int id) { 
 	
-		Stream<Meeting> meeting = cmMeetings.stream()
-				.filter(m -> m.getId() == id);
-		if (!(meeting instanceof PastMeeting)) throw new IllegalStateException("This meeting is not a past meeting");
-		return (PastMeeting) meeting;
+		List<Meeting> meetingstream = cmMeetings.stream()
+				.filter(m -> m.getId() == id)
+				.collect(Collectors.toList());
+		if(!(meetingstream.isEmpty())) {
+			Meeting meeting = meetingstream.get(0);
+				if (!(meeting instanceof PastMeeting)) {
+					throw new IllegalStateException("This meeting is not a past meeting");
+				}
+			return (PastMeeting) meeting;
+		} else { 
+			return null;
+		}
 	}
 		
 //		ArrayList<Meeting> stream = cmMeetings.stream()
@@ -133,8 +144,19 @@ public class ContactManagerImpl implements ContactManager {
 	
 	@Override
 	public FutureMeeting getFutureMeeting(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Meeting> meetingstream = cmMeetings.stream()
+				.filter(m -> m.getId() == id)
+				.collect(Collectors.toList());
+		if(!(meetingstream.isEmpty())) {
+			Meeting meeting = meetingstream.get(0);
+				if (!(meeting instanceof FutureMeeting)) {
+					throw new IllegalStateException("This meeting is not a future meeting");
+				}
+			return (FutureMeeting) meeting;
+		} else { 
+			return null;
+		}
 	}
 
 	@Override
@@ -244,7 +266,6 @@ public class ContactManagerImpl implements ContactManager {
 		
 		if (ids.length==0) throw new IllegalArgumentException("Please enter an id of the contact you wish to find");
 		
-		//IntStream instream = Arrays.stream(ids);
 		Set<Contact> contactStream = cmContacts.stream()
 				.filter(c -> Arrays.stream(ids).anyMatch(id -> id == c.getId()))
 				.collect(Collectors.toCollection(HashSet::new));

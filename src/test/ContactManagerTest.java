@@ -48,12 +48,12 @@ public class ContactManagerTest {
 	static final String FILENAME = "contacts.txt";
 	final File cmFile = new File(FILENAME);
 	private ContactManager emptyCM, testCM;
-	private Set<Contact> twoContactSet, fiveContactSet, tenContactSet, invalidContactSet;
+	private Set<Contact> singleContactSet, twoContactSet, fiveContactSet, tenContactSet, invalidContactSet;
 	
 	//--------------------------------Set Up -------------------------------------------------------------------------
 	
 	/**
-	 * Set up a clean ContactManager environment for each test, test contact sets and delete data files if they exist
+	 * Set up a clean ContactManager environment for each test, set up test contact sets and delete data files if they exist
 	 */
 	@Before 
 	public void setUp() {
@@ -67,12 +67,13 @@ public class ContactManagerTest {
 	    	 ioEx.printStackTrace();
 	     }
 	     
-	     emptyCM = buildEmptyCM(); 
-	     testCM = buildTestCM();   
-	     twoContactSet = buildTwoContactSet();
-	     fiveContactSet = buildFiveContactSet();
-	     tenContactSet = buildTenContactSet();
-	     
+	     emptyCM = buildEmptyCM(); // empty, no contacts
+	     testCM = buildTestCM();   // contains contacts 01, 02, 03, 04, 05
+	     singleContactSet = testCM.getContacts(CONTACT_ID_04);
+	     twoContactSet = testCM.getContacts(CONTACT_ID_01, CONTACT_ID_02);
+	     fiveContactSet = testCM.getContacts(CONTACT_ID_01, CONTACT_ID_02, CONTACT_ID_03, CONTACT_ID_04, CONTACT_ID_05);
+	     invalidContactSet = buildInvalidContactSet();
+	     System.out.println("SetUp completed");
 	}
 
 	@After
@@ -108,40 +109,6 @@ public class ContactManagerTest {
 		fail("Not yet implemented");
 	}
 	
-	//-------------------------Test addFutureMeeting-------------------------------------------------------------------
-	
-	@Test (expected = NullPointerException.class)
-	public void addFutureMeetingNullContactsThrowsException() {
-		testCM.addFutureMeeting(null, FUTURE_DATE_02);
-	}
-		
-	@Test (expected = NullPointerException.class)
-	public void addFutureMeetingNullDateThrowsException() {
-		emptyCM.addFutureMeeting(twoContactSet, null);
-		testCM.addFutureMeeting(twoContactSet, null);
-	}
-	
-	@Test (expected = NullPointerException.class)
-	public void addFutureMeetingNullFutureMeetingThrowsException() {
-		testCM.addFutureMeeting(null, null);
-	}
-	
-	@Test (expected = IllegalArgumentException.class)
-	public void addFutureMeetingPastDateThrowsException() {
-		testCM.addFutureMeeting(twoContactSet, PAST_DATE_03);
-	}
-	
-	@Test (expected = IllegalArgumentException.class)
-	public void addFutureMeetingInvalidContactsThrowsException() {
-		testCM.addFutureMeeting(invalidContactSet, FUTURE_DATE_01);
-	}
-	
-	@Test 
-	public void add3FutureMeetingsReturnsCorrectID() {
-		assertTrue(testCM.addFutureMeeting(fiveContactSet,FUTURE_DATE_01) == 1);
-		assertTrue(testCM.addFutureMeeting(fiveContactSet,FUTURE_DATE_02) == 2);
-		assertTrue(testCM.addFutureMeeting(fiveContactSet,FUTURE_DATE_03) == 3);
-	}
 	
 	//----------------------Test addNewContact-------------------------------------------------------------
 	
@@ -187,7 +154,11 @@ public class ContactManagerTest {
 	}
 	
 	//------------------------Test getContacts(String name)-----------------------------------------------------
-	// assertTrue(contactSet.contains(CONTACT1)); this doesn't work, presumably because the object references are not the same?
+	/**
+	 * This test builds a new contact set for the search results and therefore contains(Set) or containsAll(Set) 
+	 * cannot be used, as the object references are not the same. Therefore the tests look at size and whether
+	 * the new sets created are empty
+	 */
 	
 	@Test 
 	public void getContactsReturnsContactSetContainingString() {		
@@ -202,7 +173,6 @@ public class ContactManagerTest {
 		Set<Contact> contactSet = new HashSet<>();
 		contactSet = testCM.getContacts("Little"); // Little Bo Peep, Little Miss Muffett
 		assertFalse(contactSet.isEmpty());
-		System.out.println(contactSet.size());
 		assertTrue(contactSet.size() == 2);
 	}
 
@@ -215,8 +185,6 @@ public class ContactManagerTest {
 	
 	@Test (expected = NullPointerException.class)
 	public void getContactsNullSearchStringThrowsException() {
-		Set<Contact> contactSet =  testCM.getContacts("");
-		assertTrue(contactSet.size() == 5);
 		testCM.getContacts(NULL_SEARCH_STRING);
 	}
 
@@ -224,10 +192,64 @@ public class ContactManagerTest {
 	
 	@Test
 	public void getContactsReturnsContactSetFromId() {
-		
 		Set<Contact> contactSet = new HashSet<>();
 		contactSet = testCM.getContacts(CONTACT_ID_01,CONTACT_ID_02,CONTACT_ID_03,CONTACT_ID_04,CONTACT_ID_05);
 		assertTrue(contactSet.size() == 5);
+		assertTrue(contactSet.containsAll(twoContactSet));
+		assertTrue(contactSet.containsAll(fiveContactSet));
 	}
 	
+	@Test
+	public void getContactsReturnsSingleContactFromId() {
+		Set<Contact> contactSet = testCM.getContacts(04);
+		assertTrue(contactSet.size() == 1);
+		assertTrue(contactSet.containsAll(singleContactSet));
+		assertFalse(singleContactSet.isEmpty());
+	}
+
+	@Test (expected = IllegalArgumentException.class)
+	public void getContactsInvalidIdsThrowsException() {
+		testCM.getContacts(INVALID_ID_101, INVALID_ID_102, INVALID_ID_103);
+	}
+	
+	//-----------------------------------More basic tests relating to Contacts methods---------------------------------
+
+	
+	
+	//-------------------------Test addFutureMeeting-------------------------------------------------------------------
+	
+		@Test
+		public void addFutureMeetingReturnsCorrectID() {
+			assertTrue(testCM.addFutureMeeting(twoContactSet, FUTURE_DATE_01) == 1);
+			assertTrue(testCM.addFutureMeeting(fiveContactSet, FUTURE_DATE_03) == 2);
+		}
+		
+		@Test (expected = NullPointerException.class)
+		public void addFutureMeetingNullContactsThrowsException() {
+			testCM.addFutureMeeting(null, FUTURE_DATE_02);
+		}
+			
+		@Test (expected = NullPointerException.class)
+		public void addFutureMeetingNullDateThrowsException() {
+			emptyCM.addFutureMeeting(twoContactSet, null);
+			testCM.addFutureMeeting(twoContactSet, null);
+		}
+		
+		@Test (expected = NullPointerException.class)
+		public void addFutureMeetingNullFutureMeetingThrowsException() {
+			testCM.addFutureMeeting(null, null);
+		}
+		
+		@Test (expected = IllegalArgumentException.class)
+		public void addFutureMeetingPastDateThrowsException() {
+			testCM.addFutureMeeting(twoContactSet, PAST_DATE_03);
+		}
+		
+		@Test (expected = IllegalArgumentException.class)
+		public void addFutureMeetingInvalidContactsThrowsException() {
+			testCM.addFutureMeeting(invalidContactSet, FUTURE_DATE_01);
+		}
+		
+	
 }
+

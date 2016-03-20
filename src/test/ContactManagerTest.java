@@ -214,7 +214,26 @@ public class ContactManagerTest {
 	
 	//-----------------------------------More basic tests relating to Contacts methods---------------------------------
 
+	@Test
+	public void emptyCMcontainsNoContacts() {
+		assertTrue(emptyCM.getContacts().isEmpty());
+	}
 	
+	@Test
+	public void emptyCMaddContacts() {
+		emptyCM.addNewContact(CONTACT_NAME_01, CONTACT_NOTES_01);
+		assertTrue(emptyCM.getContacts().size() == 1);
+	}
+	
+	@Test
+	public void emptyCMgetContactsbyNameReturnsNoContacts() {
+		assertTrue(emptyCM.getContacts(CONTACT_NAME_02).isEmpty());
+	}
+	
+	@Test (expected = IllegalArgumentException.class) 
+	public void emptyCMgetContactsByIdReturnsNoContacts() {
+		emptyCM.getContacts(CONTACT_ID_02);
+	}
 	
 	//-------------------------Test addFutureMeeting-------------------------------------------------------------------
 	
@@ -251,5 +270,6 @@ public class ContactManagerTest {
 		}
 		
 	
+		
 }
 

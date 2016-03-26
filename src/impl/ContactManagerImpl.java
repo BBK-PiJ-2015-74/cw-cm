@@ -115,6 +115,7 @@ public class ContactManagerImpl implements ContactManager {
 	//all meetings have a unique id whether FutureMeetings or PastMeetings
 	//The type of meeting is indicated by the date. i.e. meetings happening in a date > cmDate are FutureMeetings
 	// meetings happening on a date < cmDate are PastMeetings
+	// somehow we have to ensure that FutureMeetings become PastMeetings when the date changes ...
 	@Override
 	public PastMeeting getPastMeeting(int id) { 
 	
@@ -131,16 +132,6 @@ public class ContactManagerImpl implements ContactManager {
 			return null;
 		}
 	}
-		
-//		ArrayList<Meeting> stream = cmMeetings.stream()
-//				.filter(m -> m.getId() == id)
-//				.findFirst();
-//		//Meeting foundmeeting = (Meeting) meeting;
-//		
-//		if (!(meeting instanceof PastMeeting)) throw new IllegalStateException();
-//		return (PastMeeting) meeting;
-//	}
-
 	
 	/**
 	 * @see spec.ContactManager#getFutureMeeting(int id)
@@ -163,10 +154,21 @@ public class ContactManagerImpl implements ContactManager {
 		}
 	}
 
+	/**
+	 * @see spec.ContactManager#getMeeting(int id)
+	 */
 	@Override
 	public Meeting getMeeting(int id) {
-		// TODO Auto-generated method stub
+		
+		List<Meeting> meetingstream = cmMeetings.stream()
+				.filter(m -> m.getId() == id)
+				.collect(Collectors.toList());
+		if(!(meetingstream.isEmpty())) {
+			Meeting meeting = meetingstream.get(0);
+			return meeting;
+		} else {
 		return null;
+		}
 	}
 
 	@Override

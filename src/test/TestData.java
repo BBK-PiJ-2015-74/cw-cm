@@ -95,6 +95,12 @@ public final class TestData {
 	static final int PAST_MTG_ID_04 = 4;
 	static final int PAST_MTG_ID_05 = 5;
 	
+	static final int FUTURE_MTG_ID_01 = 1;
+	static final int FUTURE_MTG_ID_02 = 2;
+	static final int FUTURE_MTG_ID_03 = 3;
+	static final int FUTURE_MTG_ID_04 = 4;
+	static final int FUTURE_MTG_ID_05 = 5;
+	
 //	static final int MEETING_ID_01 = 1;
 //	static final int MEETING_ID_02 = 2;
 //	static final int MEETING_ID_03 = 3;

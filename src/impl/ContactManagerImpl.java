@@ -142,6 +142,10 @@ public class ContactManagerImpl implements ContactManager {
 //	}
 
 	
+	/**
+	 * @see spec.ContactManager#getFutureMeeting(int id)
+	 * @throws IllegalArgumentException if there is a meeting with that Id happening in the past
+	 */
 	@Override
 	public FutureMeeting getFutureMeeting(int id) {
 		
@@ -151,7 +155,7 @@ public class ContactManagerImpl implements ContactManager {
 		if(!(meetingstream.isEmpty())) {
 			Meeting meeting = meetingstream.get(0);
 				if (!(meeting instanceof FutureMeeting)) {
-					throw new IllegalStateException("This meeting is not a future meeting");
+					throw new IllegalArgumentException("This meeting is not a future meeting");
 				}
 			return (FutureMeeting) meeting;
 		} else { 

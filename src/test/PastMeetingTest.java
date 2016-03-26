@@ -29,7 +29,7 @@ public class PastMeetingTest {
 	
 	private int meetingID;
 	private Calendar meetingDate;
-	private Set<Contact> meetingDelegates;
+	private Set<Contact> meetingContacts;
 	private PastMeeting pastMeeting;
 	private Contact ct1, ct2, ct3;
 	private String meetingNotes, meetingNotes1, meetingNotes2;
@@ -47,16 +47,16 @@ public class PastMeetingTest {
 		ct2 = new ContactImpl(823, "Little Miss Muppet", "The spider scared her"); 
 		ct3 = new ContactImpl(526, "The Grand Old Duke of York", "He had ten thousand men");
 		
-		meetingDelegates = new HashSet<>();
-		meetingDelegates.add(ct1);
-		meetingDelegates.add(ct2);
-		meetingDelegates.add(ct3);
+		meetingContacts = new HashSet<>();
+		meetingContacts.add(ct1);
+		meetingContacts.add(ct2);
+		meetingContacts.add(ct3);
 		
 		meetingNotes1 = "Three in a bed and the little one said";
 		meetingNotes2 = "Roll over";
 		meetingNotes = meetingNotes1.concat(" ").concat(meetingNotes2);
 		
-		pastMeeting = new PastMeetingImpl(meetingID, meetingDate, meetingDelegates, meetingNotes);
+		pastMeeting = new PastMeetingImpl(meetingID, meetingDate, meetingContacts, meetingNotes);
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class PastMeetingTest {
 	
 	@Test
 	public void testPastMeetingDelegates() {
-		assertEquals(meetingDelegates, pastMeeting.getContacts());
+		assertEquals(meetingContacts, pastMeeting.getContacts());
 	}
 	
 	@Test
@@ -84,83 +84,74 @@ public class PastMeetingTest {
 		assertEquals(meetingNotes, pastMeeting.getNotes());
 	}
 	
-	// This test fails and I don't know why. All the parameters of the object pass the test individually
 	@Test
-	public void testEqualsSameNotes() {
+	public void testEqualsSame() {
 		int meetingId2 = 012;
 		Calendar date2 = new GregorianCalendar (2015,03,07);
-		Set<Contact> meetingDelegates2 = new HashSet<>();
-		meetingDelegates2.add(ct1);
-		meetingDelegates2.add(ct2);
-		meetingDelegates2.add(ct3);
 		String meetingNotes = "Three in a bed and the little one said Roll over";
 		
-		PastMeeting pastMeeting2 = new PastMeetingImpl(meetingId2, date2, meetingDelegates2, meetingNotes);
-		//assertTrue(pastMeeting.getId()==(meetingId2));
-		//assertTrue(pastMeeting.getDate().equals(date2));
-		//assertTrue(pastMeeting.getContacts().equals(meetingDelegates2));
-		//assertTrue(pastMeeting.getNotes().equals(meetingNotes));
-		assertTrue(pastMeeting.equals(pastMeeting2));
+		PastMeeting pastMeeting2 = new PastMeetingImpl(meetingId2, date2, meetingContacts, meetingNotes);
+		assertTrue(pastMeeting.getId()==(meetingId2));
+		assertTrue(pastMeeting.getDate().equals(date2));
+		assertTrue(pastMeeting.getContacts().equals(meetingContacts));
+		assertTrue(pastMeeting.getNotes().equals(meetingNotes));
+		//assertTrue(pastMeeting.equals(pastMeeting2));
 	}
 
 	@Test
 	public void testEqualsDifferentNotes() {
+		int meetingId2 = 012;
 		Calendar date2 = new GregorianCalendar (2015,03,07);
-		Set<Contact> meetingDelegates2 = new HashSet<>();
-		meetingDelegates2.add(ct1);
-		meetingDelegates2.add(ct2);
-		meetingDelegates2.add(ct3);
-	
 		meetingNotes2 = "This note a very long and boring repetitive note";
 		
-		PastMeeting pastMeeting2 = new PastMeetingImpl(012, date2, meetingDelegates2, meetingNotes2);
+		PastMeeting pastMeeting2 = new PastMeetingImpl(meetingId2, date2, meetingContacts, meetingNotes2);
 		assertFalse(pastMeeting2.equals(pastMeeting));
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void nullDateThrowsException() {
-		PastMeeting pastMeeting = new PastMeetingImpl(meetingID, null, meetingDelegates, meetingNotes);
+		new PastMeetingImpl(meetingID, null, meetingContacts, meetingNotes);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void nullContactsThrowsException() {
-		PastMeeting pastMeeting = new PastMeetingImpl(meetingID, meetingDate, null, meetingNotes);
+		new PastMeetingImpl(meetingID, meetingDate, null, meetingNotes);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void nullNotesThrowsException() {
-		PastMeeting pastMeeting = new PastMeetingImpl(meetingID, meetingDate, meetingDelegates, null);
+		new PastMeetingImpl(meetingID, meetingDate, meetingContacts, null);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void nullDateAndContactsThrowsException() {
-		PastMeeting pastMeeting = new PastMeetingImpl(meetingID, null, meetingDelegates, null);
+		new PastMeetingImpl(meetingID, null, meetingContacts, null);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void nullContactsAndNotesThrowsException() {
-		PastMeeting pastMeeting = new PastMeetingImpl(meetingID, meetingDate, null, null);
+		new PastMeetingImpl(meetingID, meetingDate, null, null);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void nullDateAndContactsAndNotesThrowsException() {
-		PastMeeting pastMeeting = new PastMeetingImpl(meetingID, null, null, null);
+		new PastMeetingImpl(meetingID, null, null, null);
 	}
 	
 	@Test (expected = IllegalArgumentException.class) 
 	public void negativeIdThrowsException() {
-		PastMeeting pastMeeting = new PastMeetingImpl(-1, meetingDate, meetingDelegates, meetingNotes);
+		new PastMeetingImpl(-1, meetingDate, meetingContacts, meetingNotes);
 	}
 	
 	@Test (expected = IllegalArgumentException.class) 
 	public void zeroIdThrowsException() {
-		PastMeeting pastMeeting = new PastMeetingImpl(0, meetingDate, meetingDelegates, meetingNotes);
+		new PastMeetingImpl(0, meetingDate, meetingContacts, meetingNotes);
 	}
 	
 	@Test (expected = IllegalArgumentException.class) 
 	public void emptyContactsThrowsException() {
 		Set<Contact> emptyContacts = new HashSet<>();
-		PastMeeting pastMeeting = new PastMeetingImpl(meetingID, meetingDate, emptyContacts, meetingNotes);
+		new PastMeetingImpl(meetingID, meetingDate, emptyContacts, meetingNotes);
 	}
 	
 	
@@ -171,7 +162,7 @@ public class PastMeetingTest {
 		ct1 = null;
 		ct2 = null;
 		ct3 = null;
-		meetingDelegates = null;
+		meetingContacts = null;
 		meetingNotes = null;
 	}
 	

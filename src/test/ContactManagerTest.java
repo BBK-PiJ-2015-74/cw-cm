@@ -275,6 +275,9 @@ public class ContactManagerTest {
 		
 		//-------------------------Test getFutureMeeting-----------------------------------------------------------------
 		
+		/**
+		 * The first test adds a future meeting and then checks it returns the correct meeting details
+		 */
 		@Test
 		public void getFutureMeetingReturnsCorrectId() {
 			int Future_Mtg_Id_01 = testCM.addFutureMeeting(twoContactSet, FUTURE_DATE_01);
@@ -377,12 +380,46 @@ public class ContactManagerTest {
 		
 		//--------------------------------Test getPastMeeting------------------------------------------------
 		
+		/**
+		 * The first test adds a past meeting and then checks it returns the correct meeting details
+		 * NB. addNewPastMeeting returns void
+		 */
 		@Test
-		public void getPastMeetingWithId() {
+		public void getPastMeetingReturnsCorrectMeeting() {
+			testCM.addNewPastMeeting(singleContactSet, PAST_DATE_01, PAST_MTG_NOTES_01);
+			PastMeeting pastMeeting01 = testCM.getPastMeeting(PAST_MTG_ID_01);
+			assertTrue(pastMeeting01.getId()==PAST_MTG_ID_01);
+			assertTrue(pastMeeting01.getDate()==PAST_DATE_01);
+			assertTrue(pastMeeting01.getContacts()==singleContactSet);
+			assertTrue(pastMeeting01.getNotes()==PAST_MTG_NOTES_01);
+		
+			testCM.addNewPastMeeting(twoContactSet, PAST_DATE_02, PAST_MTG_NOTES_02);
+			PastMeeting pastMeeting02 = testCM.getPastMeeting(PAST_MTG_ID_02);
+			assertTrue(pastMeeting02.getId()==PAST_MTG_ID_02);
+			assertTrue(pastMeeting02.getDate()==PAST_DATE_02);
+			assertTrue(pastMeeting02.getContacts()== twoContactSet);
+			assertTrue(pastMeeting02.getNotes()==PAST_MTG_NOTES_02);
 			
+			testCM.addNewPastMeeting(fiveContactSet, PAST_DATE_03, PAST_MTG_NOTES_03);
+			PastMeeting pastMeeting03 = testCM.getPastMeeting(PAST_MTG_ID_03);
+			assertTrue(pastMeeting03.getId()==PAST_MTG_ID_03);
+			assertTrue(pastMeeting03.getDate()==PAST_DATE_03);
+			assertTrue(pastMeeting03.getContacts()== fiveContactSet);
+			assertTrue(pastMeeting03.getNotes()==PAST_MTG_NOTES_03);
 		}
 		
+		/**
+		 * Check that this method throws IllegalStateException if there is a meeting with this Id 
+		 * happening on a future date
+		 * Could implement getMeeting(int id) and check with another test
+		 */
+		@Test (expected = IllegalStateException.class)
+		public void getPastMeetingFutureDateThrowsException() {
+			testCM.addFutureMeeting(twoContactSet, FUTURE_DATE_01);
+			testCM.getPastMeeting(PAST_MTG_ID_01);
+		}
 		
+		//--------------------------------Test getMeeting(int id)-----------------------------------------------
 		
 		
 		

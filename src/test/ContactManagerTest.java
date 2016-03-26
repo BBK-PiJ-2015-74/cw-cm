@@ -73,10 +73,9 @@ public class ContactManagerTest {
 	     emptyCM = buildEmptyCM();
 	     
 	     // contains contacts 01, 02, 03, 04, 05, for testing Contacts methods
-	     // does not contain meetings
+	     // contains contacts, but does not contain meetings
+	     // Uses contact sets emptyContactSet, singleContact04, twoContactSet, fiveContactSet
 	     testCM = buildTestCM();   
-	     
-	     //Build some contact sets for testing purposes
 	     emptyContactSet = new HashSet<>();
 	     singleContact04 = testCM.getContacts(CONTACT_ID_04);
 	     twoContactSet = testCM.getContacts(CONTACT_ID_01, CONTACT_ID_02);
@@ -84,13 +83,13 @@ public class ContactManagerTest {
 	     invalidContactSet = buildInvalidContactSet();
 	     
 	     // contains contacts 01, 02, 03, 04, 05, 06 for testing Meetings methods
+	     // Uses contact sets singleContact06, threeContactSet
 	     // also contains some test Meetings. See TestData
 	     testMeetingsCM = buildTestMeetingsCM();
 	     singleContact06 = testMeetingsCM.getContacts(CONTACT_ID_06);
 	     threeContactSet = testMeetingsCM.getContacts(CONTACT_ID_04, CONTACT_ID_05, CONTACT_ID_06);
 	     addTestMeetings(testMeetingsCM, singleContact06, threeContactSet);
-	     addDuplicateMeetings(testMeetingsCM, singleContact06, threeContactSet);
-	     System.out.println("SetUp complete");
+	     //addDuplicateMeetings(testMeetingsCM, threeContactSet);
 	}
 
 	@After
@@ -468,19 +467,78 @@ public class ContactManagerTest {
 			assertTrue(testMeetingsCM.getMeeting(MTG_ID_07).getContacts()==threeContactSet);
 			assertTrue(testMeetingsCM.getMeeting(MTG_ID_08).getContacts()==threeContactSet);
 			
-			assertNull(testMeetingsCM.getMeeting(INVALID_MTG_ID_09));
-			assertNull(testMeetingsCM.getMeeting(INVALID_MTG_ID_10));
+			assertNull(testMeetingsCM.getMeeting(INVALID_MTG_ID_101));
+			assertNull(testMeetingsCM.getMeeting(INVALID_MTG_ID_102));
 		}
 		
 // ------------------------------Test getFutureMeetingList(Contact contact)----------------------------------
 		
 		/**
 		 * The method returns a list of future meetings scheduled with this contact
-		 * The list must be chronologically sorted (by meeting id??) and will not contain duplicates
-		 * The list should not contain duplicates anyway because the meetingId is set uniquely for each
+		 * The list must be chronologically sorted (by meeting id or date?) and will not contain duplicates
+		 * Question is whether we should avoid duplicates in the List, or avoid duplicate meetings being added in the first place
+		 * At the moment duplicate meetings can be given a new Id.
 		 * 	meeting by adding 1 every time, but we should check this
 		 */
 		
+		@Test
+		public void getFutureMeetingListReturnsCorrectListSize() {
+			
+			assertEquals(testMeetingsCM.getContacts("").size(),6);
+			//CONTACT_01 should not appear
+			//CONTACT_04 should appear x2, in MTG_ID_02 and MTG_ID_07
+			//CONTACT_06 should appear x4, in meetings 1, 2, 4 and 7
+			
+			Contact Contact01 = testMeetingsCM.getContacts(CONTACT_ID_01).stream().findAny().get();
+			Contact Contact04 = testMeetingsCM.getContacts(CONTACT_ID_04).stream().findAny().get();
+			Contact Contact06 = testMeetingsCM.getContacts(CONTACT_ID_06).stream().findAny().get();
+
+			assertEquals(testMeetingsCM.getFutureMeetingList(Contact01).size(),0);
+			assertEquals(testMeetingsCM.getFutureMeetingList(Contact04).size(),2); // in threeContactSet
+			assertEquals(testMeetingsCM.getFutureMeetingList(Contact06).size(),4); // in threeContactSet and singleContact06
+		}
+		
+		@Test
+		public void getFutureMeetingListReturnsSortedList() {
+			
+			assertTrue(testMeetingsCM.getContacts("").size() == 6);
+			
+			Contact Contact04 = testMeetingsCM.getContacts(CONTACT_ID_04).stream().findAny().get();
+			Contact Contact06 = testMeetingsCM.getContacts(CONTACT_ID_06).stream().findAny().get();
+			
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact04).get(0).getDate()==FUTURE_DATE_02);
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact04).get(1).getDate()==FUTURE_DATE_04);
+			
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact06).get(0).getDate()==FUTURE_DATE_01);
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact06).get(1).getDate()==FUTURE_DATE_02);
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact06).get(2).getDate()==FUTURE_DATE_03);
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact06).get(3).getDate()==FUTURE_DATE_04);
+		}
+
+		/**
+		 * Contact04 is in the two future meetings which are duplicated
+		 * Previous list size was 2, so should now be 3 with the duplicate meetings, although 2 have been added
+		 */
+		@Test
+		public void getFutureMeetingListContainsNoDuplicates() {
+			
+			addDuplicateMeetings(testMeetingsCM, threeContactSet);
+			
+			Contact Contact04 = testMeetingsCM.getContacts(CONTACT_ID_04).stream().findFirst().get();
+			
+			assertEquals(testMeetingsCM.getFutureMeetingList(Contact04).size(),3);
+			
+		}
+		
+		@Test (expected = NullPointerException.class) 
+		public void getFutureMeetingListNullContactThrowsException() {
+			testMeetingsCM.getFutureMeetingList(null);
+		}
+		
+		@Test (expected = IllegalArgumentException.class)
+		public void getFutureMeetingListUnknownContactThrowsException() {
+			testMeetingsCM.getFutureMeetingList(INVALID_CONTACT);
+		}
 		
 }
 

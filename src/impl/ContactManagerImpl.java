@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -172,10 +173,24 @@ public class ContactManagerImpl implements ContactManager {
 	}
 
 	@Override
+	/**
+	 * @see spec.ContactManager#getFutureMeetingList(Contact contact)
+	 * @throws IllegalArgumentException if the contact is not in the Contact Manager
+	 */
 	public List<Meeting> getFutureMeetingList(Contact contact) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		
+		Objects.requireNonNull(contact);
+		
+		if (!cmContacts.contains(contact)) throw new IllegalArgumentException("The contact must be in the Contact Manager");
+		
+		List<Meeting> meetingstream = cmMeetings.stream()
+				.filter(m -> m.getContacts().contains(contact) && m instanceof FutureMeeting)
+//				.sorted(Comparator.comparing(Meeting::getId)) // sorts by Id
+				.sorted(Comparator.comparing(Meeting::getDate)) // sorts by date
+				.distinct() // shows only those meetings with same contacts on different dates
+				.collect(Collectors.toList());
+				return meetingstream;		
+		}
 
 	@Override
 	public List<Meeting> getMeetingListOn(Calendar date) {

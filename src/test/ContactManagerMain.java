@@ -46,10 +46,10 @@ public class ContactManagerMain {
 			    
 			    //Create a test set of 2 contacts 
 			    setOf2TestContacts = new HashSet<>();
-				setOf2TestContacts.add(TestData.CONTACT1);
+				setOf2TestContacts.add(TestData.CONTACT_01);
 				setOf2TestContacts.add(TestData.CONTACT4);
 				
-				System.out.println(TestData.CONTACT1.getName());
+				System.out.println(TestData.CONTACT_01.getName());
 				System.out.println(TestData.CONTACT4.getName());
 				    
 				//Create a new ContactManager implementation

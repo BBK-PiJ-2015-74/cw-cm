@@ -60,31 +60,31 @@ public final class TestData {
 	
 	static final String NULL_SEARCH_STRING = null;
 	
-	static final Contact CONTACT1 = new ContactImpl(CONTACT_ID_01, CONTACT_NAME_01, CONTACT_NOTES_01);
-    static final Contact CONTACT2 = new ContactImpl(CONTACT_ID_02, CONTACT_NAME_02, CONTACT_NOTES_02);
-    static final Contact CONTACT3 = new ContactImpl(CONTACT_ID_03, CONTACT_NAME_03, CONTACT_NOTES_03);
-    static final Contact CONTACT4 = new ContactImpl(CONTACT_ID_04, CONTACT_NAME_04, CONTACT_NOTES_04);
-    static final Contact CONTACT5 = new ContactImpl(CONTACT_ID_05, CONTACT_NAME_05, CONTACT_NOTES_05);
-    static final Contact CONTACT6 = new ContactImpl(CONTACT_ID_06, CONTACT_NAME_06, CONTACT_NOTES_06);
-    static final Contact CONTACT7 = new ContactImpl(CONTACT_ID_07, CONTACT_NAME_07, CONTACT_NOTES_07);
-    static final Contact CONTACT8 = new ContactImpl(CONTACT_ID_08, CONTACT_NAME_08, CONTACT_NOTES_08);
-    static final Contact CONTACT9 = new ContactImpl(CONTACT_ID_09, CONTACT_NAME_09, CONTACT_NOTES_09);
-    static final Contact CONTACT10 = new ContactImpl(CONTACT_ID_10, CONTACT_NAME_10, CONTACT_NOTES_10);
+	static final Contact CONTACT_01 = new ContactImpl(CONTACT_ID_01, CONTACT_NAME_01, CONTACT_NOTES_01);
+    static final Contact CONTACT_02 = new ContactImpl(CONTACT_ID_02, CONTACT_NAME_02, CONTACT_NOTES_02);
+    static final Contact CONTACT_03 = new ContactImpl(CONTACT_ID_03, CONTACT_NAME_03, CONTACT_NOTES_03);
+    static final Contact CONTACT_04 = new ContactImpl(CONTACT_ID_04, CONTACT_NAME_04, CONTACT_NOTES_04);
+    static final Contact CONTACT_05 = new ContactImpl(CONTACT_ID_05, CONTACT_NAME_05, CONTACT_NOTES_05);
+    static final Contact CONTACT_06 = new ContactImpl(CONTACT_ID_06, CONTACT_NAME_06, CONTACT_NOTES_06);
+    static final Contact INVALID_CONTACT = new ContactImpl(CONTACT_ID_07, CONTACT_NAME_07, CONTACT_NOTES_07);
+    
     
     static final Contact INVALID_CONTACT1 = new ContactImpl(INVALID_ID_101, "Mickey Mouse", "Married to Minnie Mouse");
     static final Contact INVALID_CONTACT2 = new ContactImpl(INVALID_ID_102, "Donald Duck", "Quack quack");
     static final Contact INVALID_CONTACT3 = new ContactImpl(INVALID_ID_103, "Pluto the dog", "Goofy teeth");
 	
 	static final Calendar TIME_NOW = Calendar.getInstance();
-	static final Calendar FUTURE_DATE_01 = new GregorianCalendar(2017,9,29);
-	static final Calendar FUTURE_DATE_02 = new GregorianCalendar(2018,7,30);
-	static final Calendar FUTURE_DATE_03 = new GregorianCalendar(2016,10,15);
-	static final Calendar FUTURE_DATE_04 = new GregorianCalendar(2016,11,22);
+	static final Calendar FUTURE_DATE_01 = new GregorianCalendar(2016,10,15);
+	static final Calendar FUTURE_DATE_02 = new GregorianCalendar(2016,11,22);
+	static final Calendar FUTURE_DATE_03 = new GregorianCalendar(2017,7,30);
+	static final Calendar FUTURE_DATE_04 = new GregorianCalendar(2017,9,29);
+	static final Calendar FUTURE_DATE_05 = new GregorianCalendar(2018,1,1);
 	
 	static final Calendar PAST_DATE_01 = new GregorianCalendar(2015,3,10);
 	static final Calendar PAST_DATE_02 = new GregorianCalendar(2015,12,05);
 	static final Calendar PAST_DATE_03 = new GregorianCalendar(2016,1,11);	
 	static final Calendar PAST_DATE_04 = new GregorianCalendar(2016,2,17);
+	static final Calendar PAST_DATE_05 = new GregorianCalendar(2016,3,13);
 	
 	static final String PAST_MTG_NOTES_01 = "A solitary meeting involving a monologue";
 	static final String PAST_MTG_NOTES_02 = "Looney tunes, that's all Folks!";
@@ -114,8 +114,8 @@ public final class TestData {
 	static final int MTG_ID_08 = 8;
 	static final int DUPLICATE_MTG_ID_07 = 9;
 	static final int DUPLICATE_MTG_ID_08 = 10;
-	static final int INVALID_MTG_ID_09 = 11;
-	static final int INVALID_MTG_ID_10 = 12;
+	static final int INVALID_MTG_ID_101 = 101;
+	static final int INVALID_MTG_ID_102 = 102;
 	
 	/**
 	 * Create empty and test ContactManager implementations for use in tests
@@ -140,8 +140,16 @@ public final class TestData {
 		return testCM;
 	}
 	
+	static Set<Contact> buildInvalidContactSet() {
+		Set<Contact> invalidContactSet = new HashSet<>();
+		invalidContactSet.add(INVALID_CONTACT1);
+		invalidContactSet.add(INVALID_CONTACT2);
+		invalidContactSet.add(INVALID_CONTACT3);
+		return invalidContactSet;
+	}
+	
 	/**
-	 * @return testMeetingsCM with 10 test contacts and some future and past meetings for testing purposes
+	 * @return testMeetingsCM with 6 test contacts and some future and past meetings for testing purposes
 	 * Also add some duplicate meetings for duplication tests required for methods which return a List<Meeting>
 	 * The future, past and duplicate meetings are added in ContactManagerTest
 	 */
@@ -155,15 +163,8 @@ public final class TestData {
 		testMeetingsCM.addNewContact(CONTACT_NAME_06, CONTACT_NOTES_06);
 		return testMeetingsCM;
 	}
-	
-	static Set<Contact> buildInvalidContactSet() {
-		Set<Contact> invalidContactSet = new HashSet<>();
-		invalidContactSet.add(INVALID_CONTACT1);
-		invalidContactSet.add(INVALID_CONTACT2);
-		invalidContactSet.add(INVALID_CONTACT3);
-		return invalidContactSet;
-	}
     
+	//threeContactSet is CONTACT_04, CONTACT_05 and CONTACT_06; singleContactSet is CONTACT_06
 	static void addTestMeetings(ContactManager testMeetingsCM, Set<Contact> singleContact06, Set<Contact> threeContactSet) {
 		testMeetingsCM.addFutureMeeting(singleContact06, FUTURE_DATE_01); //id 1, FutureMeeting
 	    testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_02); // id 2, FutureMeeting
@@ -175,10 +176,11 @@ public final class TestData {
 	    testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_04, PAST_MTG_NOTES_04); //id 8, PastMeeting
 	}
 	     
-	static void addDuplicateMeetings(ContactManager testMeetingsCM, Set<Contact> singleContact06, Set<Contact> threeContactSet) {  
-	     testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_04); //id 7
-	     testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_04, PAST_MTG_NOTES_04); //id 8
-		
+	static void addDuplicateMeetings(ContactManager testMeetingsCM, Set<Contact> threeContactSet) {  
+	     testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_05); //id 9
+	     testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_05); //id 10
+	     //testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_05, PAST_MTG_NOTES_05); //id 11
+	     //testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_05, PAST_MTG_NOTES_05); //id 12
 	}
 	
 } // end of class

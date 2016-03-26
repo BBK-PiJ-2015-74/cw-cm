@@ -49,8 +49,8 @@ public class ContactManagerTest {
 	
 	static final String FILENAME = "contacts.txt";
 	final File cmFile = new File(FILENAME);
-	private ContactManager emptyCM, testCM;
-	private Set<Contact> emptyContactSet, singleContactSet, twoContactSet, fiveContactSet, tenContactSet, invalidContactSet;
+	private ContactManager emptyCM, testCM, testMeetingsCM;
+	private Set<Contact> emptyContactSet, singleContact04, twoContactSet, fiveContactSet, singleContact06, threeContactSet, invalidContactSet;
 	
 	//--------------------------------Set Up -------------------------------------------------------------------------
 	
@@ -69,14 +69,28 @@ public class ContactManagerTest {
 	    	 ioEx.printStackTrace();
 	     }
 	     
-	     emptyCM = buildEmptyCM(); // empty, no contacts
-	     testCM = buildTestCM();   // contains contacts 01, 02, 03, 04, 05
+	     //empty, no contacts or meetings, for testing
+	     emptyCM = buildEmptyCM();
+	     
+	     // contains contacts 01, 02, 03, 04, 05, for testing Contacts methods
+	     // does not contain meetings
+	     testCM = buildTestCM();   
+	     
+	     //Build some contact sets for testing purposes
 	     emptyContactSet = new HashSet<>();
-	     singleContactSet = testCM.getContacts(CONTACT_ID_04);
+	     singleContact04 = testCM.getContacts(CONTACT_ID_04);
 	     twoContactSet = testCM.getContacts(CONTACT_ID_01, CONTACT_ID_02);
 	     fiveContactSet = testCM.getContacts(CONTACT_ID_01, CONTACT_ID_02, CONTACT_ID_03, CONTACT_ID_04, CONTACT_ID_05);
 	     invalidContactSet = buildInvalidContactSet();
-	     System.out.println("SetUp completed");
+	     
+	     // contains contacts 01, 02, 03, 04, 05, 06 for testing Meetings methods
+	     // also contains some test Meetings. See TestData
+	     testMeetingsCM = buildTestMeetingsCM();
+	     singleContact06 = testMeetingsCM.getContacts(CONTACT_ID_06);
+	     threeContactSet = testMeetingsCM.getContacts(CONTACT_ID_04, CONTACT_ID_05, CONTACT_ID_06);
+	     addTestMeetings(testMeetingsCM, singleContact06, threeContactSet);
+	     addDuplicateMeetings(testMeetingsCM, singleContact06, threeContactSet);
+	     System.out.println("SetUp complete");
 	}
 
 	@After
@@ -117,7 +131,6 @@ public class ContactManagerTest {
 	
 	@Test
 	public void addNewContactReturnsCorrectId() {
-		assertTrue(testCM.addNewContact(CONTACT_NAME_06, CONTACT_NOTES_06) == 6);
 		assertTrue(testCM.addNewContact(CONTACT_NAME_07, CONTACT_NOTES_07) == 7);
 		assertTrue(testCM.addNewContact(CONTACT_NAME_08, CONTACT_NOTES_08) == 8);
 		assertTrue(testCM.addNewContact(CONTACT_NAME_09, CONTACT_NOTES_09) == 9);
@@ -183,7 +196,7 @@ public class ContactManagerTest {
 	public void getContactsEmptySearchStringReturnsAllContacts() {
 		Set<Contact> contactSet =  testCM.getContacts("");
 		assertFalse(contactSet.isEmpty());
-		assertTrue(contactSet.size() == 5);
+		assertTrue(contactSet.size() == 6);
 	}
 	
 	@Test (expected = NullPointerException.class)
@@ -206,8 +219,8 @@ public class ContactManagerTest {
 	public void getContactsReturnsSingleContactFromId() {
 		Set<Contact> contactSet = testCM.getContacts(04);
 		assertTrue(contactSet.size() == 1);
-		assertTrue(contactSet.containsAll(singleContactSet));
-		assertFalse(singleContactSet.isEmpty());
+		assertTrue(contactSet.containsAll(singleContact04));
+		assertFalse(singleContact04.isEmpty());
 	}
 
 	@Test (expected = IllegalArgumentException.class)
@@ -281,23 +294,23 @@ public class ContactManagerTest {
 		 */
 		@Test
 		public void getFutureMeetingReturnsCorrectId() {
-			int Future_Mtg_Id_01 = testCM.addFutureMeeting(twoContactSet, FUTURE_DATE_01);
-			FutureMeeting futureMeeting01 = testCM.getFutureMeeting(Future_Mtg_Id_01);
-			assertTrue(futureMeeting01.getId()==Future_Mtg_Id_01);
-			assertTrue(futureMeeting01.getDate()==FUTURE_DATE_01);
-			assertTrue(futureMeeting01.getContacts()== twoContactSet);
-		
-			int Future_Mtg_Id_02 = testCM.addFutureMeeting(fiveContactSet, FUTURE_DATE_02);
-			FutureMeeting futureMeeting02 = testCM.getFutureMeeting(Future_Mtg_Id_02);
-			assertTrue(futureMeeting02.getId()==Future_Mtg_Id_02);
-			assertTrue(futureMeeting02.getDate()==FUTURE_DATE_02);
-			assertTrue(futureMeeting02.getContacts()== fiveContactSet);
 			
-			int Future_Mtg_Id_03 = testCM.addFutureMeeting(singleContactSet, FUTURE_DATE_03);
-			FutureMeeting futureMeeting03 = testCM.getFutureMeeting(Future_Mtg_Id_03);
-			assertTrue(futureMeeting03.getId()==Future_Mtg_Id_03);
-			assertTrue(futureMeeting03.getDate()==FUTURE_DATE_03);
-			assertTrue(futureMeeting03.getContacts()== singleContactSet);
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_01).getId()==MTG_ID_01);
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_01).getDate()==FUTURE_DATE_01);
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_01).getContacts()==singleContact06);
+		
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_02).getId()==MTG_ID_02);
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_02).getDate()==FUTURE_DATE_02);
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_02).getContacts()==threeContactSet);
+			
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_04).getId()==MTG_ID_04);
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_04).getDate()==FUTURE_DATE_03);
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_04).getContacts()==singleContact06);
+			
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_07).getId()==MTG_ID_07);
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_07).getDate()==FUTURE_DATE_04);
+			assertTrue(testMeetingsCM.getFutureMeeting(MTG_ID_07).getContacts()==threeContactSet);
+			
 		}
 		
 		@Test (expected = IllegalArgumentException.class)
@@ -317,17 +330,17 @@ public class ContactManagerTest {
 		
 		@Test
 		public void addNewPastMeetingTest01() {
-			testCM.addNewPastMeeting(singleContactSet, PAST_DATE_01, PAST_MTG_NOTES_01);
+			testCM.addNewPastMeeting(singleContact04, PAST_DATE_01, PAST_MTG_NOTES_01);
 			PastMeeting pastMeeting01 = testCM.getPastMeeting(PAST_MTG_ID_01);
 			assertTrue(pastMeeting01.getId() == PAST_MTG_ID_01);
 			assertTrue(pastMeeting01.getDate() == PAST_DATE_01);
-			assertTrue(pastMeeting01.getContacts() == singleContactSet);
+			assertTrue(pastMeeting01.getContacts() == singleContact04);
 			assertTrue(pastMeeting01.getNotes() == PAST_MTG_NOTES_01);
 		}
 		
 		@Test
 		public void addNewPastMeetingTest02() {
-			testCM.addNewPastMeeting(singleContactSet, PAST_DATE_01, PAST_MTG_NOTES_01);
+			testCM.addNewPastMeeting(singleContact04, PAST_DATE_01, PAST_MTG_NOTES_01);
 			testCM.addNewPastMeeting(twoContactSet, PAST_DATE_02, PAST_MTG_NOTES_02);
 			PastMeeting pastMeeting02 = testCM.getPastMeeting(PAST_MTG_ID_02);
 			assertTrue(pastMeeting02.getId() == PAST_MTG_ID_02);
@@ -338,7 +351,7 @@ public class ContactManagerTest {
 		
 		@Test
 		public void addNewPastMeetingTest03() {
-			testCM.addNewPastMeeting(singleContactSet, PAST_DATE_01, PAST_MTG_NOTES_01);
+			testCM.addNewPastMeeting(singleContact04, PAST_DATE_01, PAST_MTG_NOTES_01);
 			testCM.addNewPastMeeting(twoContactSet, PAST_DATE_02, PAST_MTG_NOTES_02);
 			testCM.addNewPastMeeting(fiveContactSet, PAST_DATE_03, PAST_MTG_NOTES_03);
 			PastMeeting pastMeeting03 = testCM.getPastMeeting(PAST_MTG_ID_03);
@@ -350,7 +363,7 @@ public class ContactManagerTest {
 		
 		@Test (expected = IllegalArgumentException.class) 
 		public void addNewPastMeetingFutureDateThrowsException() {
-			testCM.addNewPastMeeting(singleContactSet, FUTURE_DATE_01, PAST_MTG_NOTES_01);
+			testCM.addNewPastMeeting(singleContact04, FUTURE_DATE_01, PAST_MTG_NOTES_01);
 		}
 		
 		@Test (expected = IllegalArgumentException.class)
@@ -387,26 +400,25 @@ public class ContactManagerTest {
 		 */
 		@Test
 		public void getPastMeetingReturnsCorrectMeeting() {
-			testCM.addNewPastMeeting(singleContactSet, PAST_DATE_01, PAST_MTG_NOTES_01);
-			PastMeeting pastMeeting01 = testCM.getPastMeeting(PAST_MTG_ID_01);
-			assertTrue(pastMeeting01.getId()==PAST_MTG_ID_01);
-			assertTrue(pastMeeting01.getDate()==PAST_DATE_01);
-			assertTrue(pastMeeting01.getContacts()==singleContactSet);
-			assertTrue(pastMeeting01.getNotes()==PAST_MTG_NOTES_01);
-		
-			testCM.addNewPastMeeting(twoContactSet, PAST_DATE_02, PAST_MTG_NOTES_02);
-			PastMeeting pastMeeting02 = testCM.getPastMeeting(PAST_MTG_ID_02);
-			assertTrue(pastMeeting02.getId()==PAST_MTG_ID_02);
-			assertTrue(pastMeeting02.getDate()==PAST_DATE_02);
-			assertTrue(pastMeeting02.getContacts()== twoContactSet);
-			assertTrue(pastMeeting02.getNotes()==PAST_MTG_NOTES_02);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_03).getId()==MTG_ID_03);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_03).getDate()==PAST_DATE_01);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_03).getContacts()==singleContact06);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_03).getNotes()==PAST_MTG_NOTES_01);
 			
-			testCM.addNewPastMeeting(fiveContactSet, PAST_DATE_03, PAST_MTG_NOTES_03);
-			PastMeeting pastMeeting03 = testCM.getPastMeeting(PAST_MTG_ID_03);
-			assertTrue(pastMeeting03.getId()==PAST_MTG_ID_03);
-			assertTrue(pastMeeting03.getDate()==PAST_DATE_03);
-			assertTrue(pastMeeting03.getContacts()== fiveContactSet);
-			assertTrue(pastMeeting03.getNotes()==PAST_MTG_NOTES_03);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_05).getId()==MTG_ID_05);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_05).getDate()==PAST_DATE_02);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_05).getContacts()==threeContactSet);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_05).getNotes()==PAST_MTG_NOTES_02);
+			
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_06).getId()==MTG_ID_06);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_06).getDate()==PAST_DATE_03);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_06).getContacts()==singleContact06);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_06).getNotes()==PAST_MTG_NOTES_03);
+		
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_08).getId()==MTG_ID_08);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_08).getDate()==PAST_DATE_04);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_08).getContacts()==threeContactSet);
+			assertTrue(testMeetingsCM.getPastMeeting(MTG_ID_08).getNotes()==PAST_MTG_NOTES_04);
 		}
 		
 		/**
@@ -428,49 +440,47 @@ public class ContactManagerTest {
 		 */
 		@Test
 		public void getMeetingReturnsCorrectMeeting() {
-			testCM.addFutureMeeting(twoContactSet, FUTURE_DATE_01); //id 1
-			testCM.addFutureMeeting(fiveContactSet, FUTURE_DATE_02); // id 2
-			testCM.addFutureMeeting(singleContactSet, FUTURE_DATE_03); // id 3
-			testCM.addNewPastMeeting(singleContactSet, PAST_DATE_01, PAST_MTG_NOTES_01); // id 4
-			testCM.addNewPastMeeting(twoContactSet, PAST_DATE_02, PAST_MTG_NOTES_02);// id 5
-			testCM.addNewPastMeeting(fiveContactSet, PAST_DATE_03, PAST_MTG_NOTES_03); //id 6
 			
-			Meeting Meeting_01 = testCM.getMeeting(MTG_ID_01);
-			assertNotNull(Meeting_01);
-			assertTrue(Meeting_01.getId() == MTG_ID_01);
-			assertTrue(Meeting_01.getDate() == FUTURE_DATE_01);
-			assertTrue(Meeting_01.getContacts() == twoContactSet);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_01).getId()==MTG_ID_01);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_02).getId()==MTG_ID_02);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_03).getId()==MTG_ID_03);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_04).getId()==MTG_ID_04);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_05).getId()==MTG_ID_05);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_06).getId()==MTG_ID_06);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_07).getId()==MTG_ID_07);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_08).getId()==MTG_ID_08);
 					
-			Meeting Meeting_02 = testCM.getMeeting(MTG_ID_02);
-			assertNotNull(Meeting_02);
-			assertTrue(Meeting_02.getId() == MTG_ID_02);
-			assertTrue(Meeting_02.getDate() == FUTURE_DATE_02);
-			assertTrue(Meeting_02.getContacts() == fiveContactSet);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_01).getDate()==FUTURE_DATE_01);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_02).getDate()==FUTURE_DATE_02);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_03).getDate()==PAST_DATE_01);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_04).getDate()==FUTURE_DATE_03);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_05).getDate()==PAST_DATE_02);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_06).getDate()==PAST_DATE_03);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_07).getDate()==FUTURE_DATE_04);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_08).getDate()==PAST_DATE_04);
 			
-			Meeting Meeting_03 = testCM.getMeeting(MTG_ID_03);
-			assertNotNull(Meeting_03);
-			assertTrue(Meeting_03.getId() == MTG_ID_03);
-			assertTrue(Meeting_03.getDate() == FUTURE_DATE_03);
-			assertTrue(Meeting_03.getContacts() == singleContactSet);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_01).getContacts()==singleContact06);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_02).getContacts()==threeContactSet);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_03).getContacts()==singleContact06);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_04).getContacts()==singleContact06);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_05).getContacts()==threeContactSet);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_06).getContacts()==singleContact06);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_07).getContacts()==threeContactSet);
+			assertTrue(testMeetingsCM.getMeeting(MTG_ID_08).getContacts()==threeContactSet);
 			
-			Meeting Meeting_04 = testCM.getMeeting(MTG_ID_04);
-			assertNotNull(Meeting_04);
-			assertTrue(Meeting_04.getId() == MTG_ID_04);
-			assertTrue(Meeting_04.getDate() == PAST_DATE_01);
-			assertTrue(Meeting_04.getContacts() == singleContactSet);
-			
-			Meeting Meeting_05 = testCM.getMeeting(MTG_ID_05);
-			assertNotNull(Meeting_05);
-			assertTrue(Meeting_05.getId() == MTG_ID_05);
-			assertTrue(Meeting_05.getDate() == PAST_DATE_02);
-			assertTrue(Meeting_05.getContacts() == twoContactSet);
-			
-			Meeting Meeting_06 = testCM.getMeeting(MTG_ID_06);
-			assertNotNull(Meeting_06);
-			assertTrue(Meeting_06.getId() == MTG_ID_06);
-			assertTrue(Meeting_06.getDate() == PAST_DATE_03);
-			assertTrue(Meeting_06.getContacts() == fiveContactSet);
+			assertNull(testMeetingsCM.getMeeting(INVALID_MTG_ID_09));
+			assertNull(testMeetingsCM.getMeeting(INVALID_MTG_ID_10));
 		}
+		
+// ------------------------------Test getFutureMeetingList(Contact contact)----------------------------------
+		
+		/**
+		 * The method returns a list of future meetings scheduled with this contact
+		 * The list must be chronologically sorted (by meeting id??) and will not contain duplicates
+		 * The list should not contain duplicates anyway because the meetingId is set uniquely for each
+		 * 	meeting by adding 1 every time, but we should check this
+		 */
+		
 		
 }
 

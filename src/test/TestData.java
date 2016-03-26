@@ -79,9 +79,12 @@ public final class TestData {
 	static final Calendar FUTURE_DATE_01 = new GregorianCalendar(2017,9,29);
 	static final Calendar FUTURE_DATE_02 = new GregorianCalendar(2018,7,30);
 	static final Calendar FUTURE_DATE_03 = new GregorianCalendar(2016,10,15);
+	static final Calendar FUTURE_DATE_04 = new GregorianCalendar(2016,11,22);
+	
 	static final Calendar PAST_DATE_01 = new GregorianCalendar(2015,3,10);
 	static final Calendar PAST_DATE_02 = new GregorianCalendar(2015,12,05);
 	static final Calendar PAST_DATE_03 = new GregorianCalendar(2016,1,11);	
+	static final Calendar PAST_DATE_04 = new GregorianCalendar(2016,2,17);
 	
 	static final String PAST_MTG_NOTES_01 = "A solitary meeting involving a monologue";
 	static final String PAST_MTG_NOTES_02 = "Looney tunes, that's all Folks!";
@@ -107,10 +110,12 @@ public final class TestData {
 	static final int MTG_ID_04 = 4;
 	static final int MTG_ID_05 = 5;
 	static final int MTG_ID_06 = 6;
-	static final int INVALID_MTG_ID_07 = 7;
-	static final int INVALID_MTG_ID_08 = 8;
-	static final int INVALID_MTG_ID_09 = 9;
-	static final int INVALID_MTG_ID_10 = 10;
+	static final int MTG_ID_07 = 7;
+	static final int MTG_ID_08 = 8;
+	static final int DUPLICATE_MTG_ID_07 = 9;
+	static final int DUPLICATE_MTG_ID_08 = 10;
+	static final int INVALID_MTG_ID_09 = 11;
+	static final int INVALID_MTG_ID_10 = 12;
 	
 	/**
 	 * Create empty and test ContactManager implementations for use in tests
@@ -122,7 +127,7 @@ public final class TestData {
 	}
 	
 	/**
-	 * @return testCM
+	 * @return testCM with 6 test contacts but no meetings
 	 */
 	static ContactManager buildTestCM() {
 		ContactManager testCM = new ContactManagerImpl();
@@ -131,7 +136,24 @@ public final class TestData {
 		testCM.addNewContact(CONTACT_NAME_03, CONTACT_NOTES_03);
 		testCM.addNewContact(CONTACT_NAME_04, CONTACT_NOTES_04);
 		testCM.addNewContact(CONTACT_NAME_05, CONTACT_NOTES_05);
+		testCM.addNewContact(CONTACT_NAME_06, CONTACT_NOTES_06);
 		return testCM;
+	}
+	
+	/**
+	 * @return testMeetingsCM with 10 test contacts and some future and past meetings for testing purposes
+	 * Also add some duplicate meetings for duplication tests required for methods which return a List<Meeting>
+	 * The future, past and duplicate meetings are added in ContactManagerTest
+	 */
+	static ContactManager buildTestMeetingsCM() {
+		ContactManager testMeetingsCM = new ContactManagerImpl();
+		testMeetingsCM.addNewContact(CONTACT_NAME_01, CONTACT_NOTES_01); //NB. The ContactManager assigns the contact ID.
+		testMeetingsCM.addNewContact(CONTACT_NAME_02, CONTACT_NOTES_02);
+		testMeetingsCM.addNewContact(CONTACT_NAME_03, CONTACT_NOTES_03);
+		testMeetingsCM.addNewContact(CONTACT_NAME_04, CONTACT_NOTES_04);
+		testMeetingsCM.addNewContact(CONTACT_NAME_05, CONTACT_NOTES_05);
+		testMeetingsCM.addNewContact(CONTACT_NAME_06, CONTACT_NOTES_06);
+		return testMeetingsCM;
 	}
 	
 	static Set<Contact> buildInvalidContactSet() {
@@ -142,6 +164,23 @@ public final class TestData {
 		return invalidContactSet;
 	}
     
+	static void addTestMeetings(ContactManager testMeetingsCM, Set<Contact> singleContact06, Set<Contact> threeContactSet) {
+		testMeetingsCM.addFutureMeeting(singleContact06, FUTURE_DATE_01); //id 1, FutureMeeting
+	    testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_02); // id 2, FutureMeeting
+	    testMeetingsCM.addNewPastMeeting(singleContact06, PAST_DATE_01, PAST_MTG_NOTES_01);// id 3, PastMeeting
+	    testMeetingsCM.addFutureMeeting(singleContact06, FUTURE_DATE_03); // id 4, FutureMeeting
+	    testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_02, PAST_MTG_NOTES_02);// id 5, PastMeeting
+	    testMeetingsCM.addNewPastMeeting(singleContact06, PAST_DATE_03, PAST_MTG_NOTES_03); //id 6, PastMeeting
+	    testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_04); //id 7, FutureMeeting
+	    testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_04, PAST_MTG_NOTES_04); //id 8, PastMeeting
+	}
+	     
+	static void addDuplicateMeetings(ContactManager testMeetingsCM, Set<Contact> singleContact06, Set<Contact> threeContactSet) {  
+	     testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_04); //id 7
+	     testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_04, PAST_MTG_NOTES_04); //id 8
+		
+	}
+	
 } // end of class
 	
 

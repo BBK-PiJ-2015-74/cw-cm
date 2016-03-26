@@ -24,6 +24,7 @@ import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertThat;
@@ -421,7 +422,55 @@ public class ContactManagerTest {
 		
 		//--------------------------------Test getMeeting(int id)-----------------------------------------------
 		
-		
+		/**
+		 * The method getMeeting(int id) should return both PastMeetings and FutureMeetings.
+		 * ids should be sequential
+		 */
+		@Test
+		public void getMeetingReturnsCorrectMeeting() {
+			testCM.addFutureMeeting(twoContactSet, FUTURE_DATE_01); //id 1
+			testCM.addFutureMeeting(fiveContactSet, FUTURE_DATE_02); // id 2
+			testCM.addFutureMeeting(singleContactSet, FUTURE_DATE_03); // id 3
+			testCM.addNewPastMeeting(singleContactSet, PAST_DATE_01, PAST_MTG_NOTES_01); // id 4
+			testCM.addNewPastMeeting(twoContactSet, PAST_DATE_02, PAST_MTG_NOTES_02);// id 5
+			testCM.addNewPastMeeting(fiveContactSet, PAST_DATE_03, PAST_MTG_NOTES_03); //id 6
+			
+			Meeting Meeting_01 = testCM.getMeeting(MTG_ID_01);
+			assertNotNull(Meeting_01);
+			assertTrue(Meeting_01.getId() == MTG_ID_01);
+			assertTrue(Meeting_01.getDate() == FUTURE_DATE_01);
+			assertTrue(Meeting_01.getContacts() == twoContactSet);
+					
+			Meeting Meeting_02 = testCM.getMeeting(MTG_ID_02);
+			assertNotNull(Meeting_02);
+			assertTrue(Meeting_02.getId() == MTG_ID_02);
+			assertTrue(Meeting_02.getDate() == FUTURE_DATE_02);
+			assertTrue(Meeting_02.getContacts() == fiveContactSet);
+			
+			Meeting Meeting_03 = testCM.getMeeting(MTG_ID_03);
+			assertNotNull(Meeting_03);
+			assertTrue(Meeting_03.getId() == MTG_ID_03);
+			assertTrue(Meeting_03.getDate() == FUTURE_DATE_03);
+			assertTrue(Meeting_03.getContacts() == singleContactSet);
+			
+			Meeting Meeting_04 = testCM.getMeeting(MTG_ID_04);
+			assertNotNull(Meeting_04);
+			assertTrue(Meeting_04.getId() == MTG_ID_04);
+			assertTrue(Meeting_04.getDate() == PAST_DATE_01);
+			assertTrue(Meeting_04.getContacts() == singleContactSet);
+			
+			Meeting Meeting_05 = testCM.getMeeting(MTG_ID_05);
+			assertNotNull(Meeting_05);
+			assertTrue(Meeting_05.getId() == MTG_ID_05);
+			assertTrue(Meeting_05.getDate() == PAST_DATE_02);
+			assertTrue(Meeting_05.getContacts() == twoContactSet);
+			
+			Meeting Meeting_06 = testCM.getMeeting(MTG_ID_06);
+			assertNotNull(Meeting_06);
+			assertTrue(Meeting_06.getId() == MTG_ID_06);
+			assertTrue(Meeting_06.getDate() == PAST_DATE_03);
+			assertTrue(Meeting_06.getContacts() == fiveContactSet);
+		}
 		
 }
 

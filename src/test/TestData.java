@@ -101,16 +101,16 @@ public final class TestData {
 	static final int FUTURE_MTG_ID_04 = 4;
 	static final int FUTURE_MTG_ID_05 = 5;
 	
-//	static final int MEETING_ID_01 = 1;
-//	static final int MEETING_ID_02 = 2;
-//	static final int MEETING_ID_03 = 3;
-//	static final int MEETING_ID_04 = 4;
-//	static final int MEETING_ID_05 = 5;
-//	static final int MEETING_ID_06 = 6;
-//	static final int MEETING_ID_07 = 7;
-//	static final int MEETING_ID_08 = 8;
-//	static final int MEETING_ID_09 = 9;
-//	static final int MEETING_ID_10 = 10;
+	static final int MTG_ID_01 = 1;
+	static final int MTG_ID_02 = 2;
+	static final int MTG_ID_03 = 3;
+	static final int MTG_ID_04 = 4;
+	static final int MTG_ID_05 = 5;
+	static final int MTG_ID_06 = 6;
+	static final int INVALID_MTG_ID_07 = 7;
+	static final int INVALID_MTG_ID_08 = 8;
+	static final int INVALID_MTG_ID_09 = 9;
+	static final int INVALID_MTG_ID_10 = 10;
 	
 	/**
 	 * Create empty and test ContactManager implementations for use in tests

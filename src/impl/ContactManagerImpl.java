@@ -6,11 +6,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -18,12 +14,9 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.*;
-
 import spec.*;
-import impl.*;
 
 public class ContactManagerImpl implements ContactManager {
 	
@@ -102,11 +95,18 @@ public class ContactManagerImpl implements ContactManager {
 			throw new IllegalArgumentException("Contact not in Contact Manager. Please add contact first");
 		}
 		
-		meetingId = updateMeetingId();
-		FutureMeeting newFutureMeeting = new FutureMeetingImpl(meetingId, date, contacts);
-		Objects.requireNonNull(newFutureMeeting);
-		cmMeetings.add(newFutureMeeting);
-		return meetingId;
+		List<Meeting> meetingstream = cmMeetings.stream() // find if any meetings already exist with the same contact on this date
+				.filter(m -> m.getContacts().contains(contacts) && m.getDate()==date && m instanceof FutureMeeting)
+				.collect(Collectors.toList()); 
+		if (!(meetingstream.isEmpty())) {
+			return meetingstream.get(0).getId(); // if stream is not empty, there must already be a meeting with the same contacts and date
+		} else {
+			meetingId = updateMeetingId();
+			FutureMeeting newFutureMeeting = new FutureMeetingImpl(meetingId, date, contacts);
+			Objects.requireNonNull(newFutureMeeting);
+			cmMeetings.add(newFutureMeeting);
+			return meetingId;
+		}
 	}
 
 	/**

@@ -1,20 +1,9 @@
 package test;
 
-import impl.ContactManagerImpl;
-import impl.FutureMeetingImpl;
-import impl.PastMeetingImpl;
-import impl.ContactImpl;
 import spec.*;
 import static test.TestData.*;
 import java.util.Set;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.ArrayList;
-import java.util.List;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,16 +13,10 @@ import java.nio.file.Path;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.junit.matchers.JUnitMatchers;
-import static org.hamcrest.CoreMatchers.*;
-
-import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -258,6 +241,13 @@ public class ContactManagerTest {
 		public void addFutureMeetingReturnsCorrectId() {
 			assertTrue(testCM.addFutureMeeting(twoContactSet, FUTURE_DATE_01) == 1);
 			assertTrue(testCM.addFutureMeeting(fiveContactSet, FUTURE_DATE_03) == 2);
+		}
+		
+		@Test
+		public void addFutureMeetingPreventsDuplicates() {
+			int FM_Id_01 = testCM.addFutureMeeting(twoContactSet, FUTURE_DATE_02);
+			int FM_Id_02 = testCM.addFutureMeeting(twoContactSet, FUTURE_DATE_02);
+			assertEquals(FM_Id_01, FM_Id_02);
 		}
 		
 		@Test (expected = NullPointerException.class)

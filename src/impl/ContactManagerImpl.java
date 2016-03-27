@@ -176,6 +176,7 @@ public class ContactManagerImpl implements ContactManager {
 	/**
 	 * @see spec.ContactManager#getFutureMeetingList(Contact contact)
 	 * @throws IllegalArgumentException if the contact is not in the Contact Manager
+	 * @throws NullPointerException if the contact is null
 	 */
 	public List<Meeting> getFutureMeetingList(Contact contact) {
 		
@@ -262,20 +263,7 @@ public class ContactManagerImpl implements ContactManager {
 				.filter(c -> c.getName().toLowerCase().contains(name.toLowerCase()))
 				.collect(Collectors.toCollection(HashSet::new));
 		return searchResults;
-	}
-		
-//		Objects.requireNonNull(name);
-//		Set<Contact> searchResults = new HashSet<>();
-//		
-//		for (Contact c : cmContacts) {
-//			if (c.getName().toLowerCase().contains(name.toLowerCase())) {
-//				searchResults.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
-//			}
-//			else if (name.equals("")) {
-//				searchResults.add(new ContactImpl(c.getId(), c.getName(), c.getNotes()));
-//			}
-//		}
-//		return searchResults;
+		}
 	}
 
 	/**

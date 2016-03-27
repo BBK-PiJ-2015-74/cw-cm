@@ -28,11 +28,13 @@ public class ContactManagerMain {
 	public static void main(String[] args) {
 		
 		Calendar now = Calendar.getInstance();
+		Calendar PAST_DATE = new GregorianCalendar(2016,02,26);
 		Set<Contact> setOf2TestContacts;
 		
 		//Set time to current system time
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		System.out.println(dateFormat.format(now.getTime()));
+		System.out.println(dateFormat.format(PAST_DATE.getTime()));
 				
 		//Delete all data files if they exist
 			     try {
@@ -47,10 +49,10 @@ public class ContactManagerMain {
 			    //Create a test set of 2 contacts 
 			    setOf2TestContacts = new HashSet<>();
 				setOf2TestContacts.add(TestData.CONTACT_01);
-				setOf2TestContacts.add(TestData.CONTACT4);
+				setOf2TestContacts.add(TestData.CONTACT_04);
 				
 				System.out.println(TestData.CONTACT_01.getName());
-				System.out.println(TestData.CONTACT4.getName());
+				System.out.println(TestData.CONTACT_04.getName());
 				    
 				//Create a new ContactManager implementation
 				ContactManager cm = new ContactManagerImpl();

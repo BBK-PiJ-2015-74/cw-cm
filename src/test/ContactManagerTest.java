@@ -477,8 +477,8 @@ public class ContactManagerTest {
 		 * The method returns a list of future meetings scheduled with this contact
 		 * The list must be chronologically sorted (by meeting id or date?) and will not contain duplicates
 		 * Question is whether we should avoid duplicates in the List, or avoid duplicate meetings being added in the first place
-		 * At the moment duplicate meetings can be given a new Id.
-		 * 	meeting by adding 1 every time, but we should check this
+		 * At the moment duplicate meetings can be given a new Id
+		 * Streams used to get a contact from Set<Contact> (getContacts(id)) return type is Set<Contact>, not contact
 		 */
 		
 		@Test
@@ -498,10 +498,13 @@ public class ContactManagerTest {
 			assertEquals(testMeetingsCM.getFutureMeetingList(Contact06).size(),4); // in threeContactSet and singleContact06
 		}
 		
+		/**
+		 * I am interpreting 'chronologically sorted' as sorted by date, rather than by id
+		 */
 		@Test
 		public void getFutureMeetingListReturnsSortedList() {
 			
-			assertTrue(testMeetingsCM.getContacts("").size() == 6);
+			assertTrue(testMeetingsCM.getContacts().size() == 6);
 			
 			Contact Contact04 = testMeetingsCM.getContacts(CONTACT_ID_04).stream().findAny().get();
 			Contact Contact06 = testMeetingsCM.getContacts(CONTACT_ID_06).stream().findAny().get();
@@ -518,16 +521,24 @@ public class ContactManagerTest {
 		/**
 		 * Contact04 is in the two future meetings which are duplicated
 		 * Previous list size was 2, so should now be 3 with the duplicate meetings, although 2 have been added
+		 * distinct() call within getFutureMeetingList(Contact contact) does not seem to be working ...
+		 * WHY DOESN'T THIS WORK???
 		 */
 		@Test
 		public void getFutureMeetingListContainsNoDuplicates() {
 			
 			addDuplicateMeetings(testMeetingsCM, threeContactSet);
+			Contact Contact04 = testMeetingsCM.getContacts(CONTACT_ID_04).stream().findAny().get();
 			
-			Contact Contact04 = testMeetingsCM.getContacts(CONTACT_ID_04).stream().findFirst().get();
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact04).get(0).getDate()==FUTURE_DATE_02);
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact04).get(1).getDate()==FUTURE_DATE_04);
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact04).get(2).getDate()==FUTURE_DATE_05);
+			assertTrue(testMeetingsCM.getFutureMeetingList(Contact04).get(3).getDate()==FUTURE_DATE_05);
 			
-			assertEquals(testMeetingsCM.getFutureMeetingList(Contact04).size(),3);
+			assertEquals(testMeetingsCM.getFutureMeetingList(Contact04).get(2).getId(), 9);
+			assertEquals(testMeetingsCM.getFutureMeetingList(Contact04).get(3).getId(), 10);
 			
+			assertEquals(testMeetingsCM.getFutureMeetingList(Contact04).size(),3); 
 		}
 		
 		@Test (expected = NullPointerException.class) 

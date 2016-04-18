@@ -79,12 +79,14 @@ public final class TestData {
 	static final Calendar FUTURE_DATE_03 = new GregorianCalendar(2017,7,30);
 	static final Calendar FUTURE_DATE_04 = new GregorianCalendar(2017,8,29);
 	static final Calendar FUTURE_DATE_05 = new GregorianCalendar(2018,0,1); // NB. month is zero based so January is 0
+	static final Calendar FUTURE_DATE_06 = new GregorianCalendar(2018,1,3);
 	
 	static final Calendar PAST_DATE_01 = new GregorianCalendar(2015,3,10);
 	static final Calendar PAST_DATE_02 = new GregorianCalendar(2015,11,05);
 	static final Calendar PAST_DATE_03 = new GregorianCalendar(2016,0,11);	
 	static final Calendar PAST_DATE_04 = new GregorianCalendar(2016,1,17);
 	static final Calendar PAST_DATE_05 = new GregorianCalendar(2016,2,26); // NB. month is zero-based so month 2 is March
+	static final Calendar PAST_DATE_06 = new GregorianCalendar(2016,2,18);
 	
 	static final String PAST_MTG_NOTES_01 = "A solitary meeting involving a monologue";
 	static final String PAST_MTG_NOTES_02 = "Looney tunes, that's all Folks!";
@@ -174,16 +176,20 @@ public final class TestData {
 	    testMeetingsCM.addNewPastMeeting(singleContact06, PAST_DATE_03, PAST_MTG_NOTES_03); //id 6, PastMeeting
 	    testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_04); //id 7, FutureMeeting
 	    testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_04, PAST_MTG_NOTES_04); //id 8, PastMeeting
+	    testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_01); //id 9
+	    testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_01, PAST_MTG_NOTES_01); //id 10
+	    
 	}
 	     
 	static void addDuplicateMeetings(ContactManager testMeetingsCM, Set<Contact> threeContactSet) {  
-	     testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_05); //id 9
-	     testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_05); //id 10
-	     testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_05, PAST_MTG_NOTES_05); //id 11
-	     testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_05, PAST_MTG_NOTES_05); //id 12
+		 testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_01, PAST_MTG_NOTES_01); //id 11 duplicate
+	     testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_05); //id 12
+	     testMeetingsCM.addFutureMeeting(threeContactSet, FUTURE_DATE_05); //id 13 duplicate to id 12
+	     testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_05, PAST_MTG_NOTES_05); //id 14
+	     testMeetingsCM.addNewPastMeeting(threeContactSet, PAST_DATE_05, PAST_MTG_NOTES_05); //id 15 duplicate to id 14
 	}
 	
-} // end of class
+}
 	
 
 

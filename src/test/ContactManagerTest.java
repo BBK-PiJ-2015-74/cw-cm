@@ -3,8 +3,9 @@ package test;
 import spec.*;
 import static test.TestData.*;
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashSet;
-
+import java.util.List;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -72,7 +73,7 @@ public class ContactManagerTest {
 	     singleContact06 = testMeetingsCM.getContacts(CONTACT_ID_06);
 	     threeContactSet = testMeetingsCM.getContacts(CONTACT_ID_04, CONTACT_ID_05, CONTACT_ID_06);
 	     addTestMeetings(testMeetingsCM, singleContact06, threeContactSet);
-	     //addDuplicateMeetings(testMeetingsCM, threeContactSet);
+	     addDuplicateMeetings(testMeetingsCM, threeContactSet);
 	}
 
 	@After
@@ -541,5 +542,65 @@ public class ContactManagerTest {
 			testMeetingsCM.getFutureMeetingList(INVALID_CONTACT);
 		}
 		
-}
+
+//------------------------------Test getMeetingListOn(Calendar date)----------------------------------
+
+		/**
+		 * Method returns the list of meetings scheduled for, or that took place on the specified date
+		 * If there are none, the returned list will be empty
+		 * Otherwise, the list will be chronologically sorted (by date or by id??) -
+		 * this actually doesn't make any sense, as the list is a list of meetings which take place
+		 * on a specified date. My ContactManagerImpl doesn't record the time of the meeting, just the date -
+		 * therefore by definition the list will be sorted by date
+		 * 
+		 * The list will not contain any duplicates
+		 * @see#TestData for contents of testMeetingsCM (in which a number of test meetings have already
+		 * been added, including future and past meetings
+		 */
+
+		@Test
+		public void getMeetingListOnReturnsCorrectListSize() {
+			assertEquals(testMeetingsCM.getMeetingListOn(FUTURE_DATE_01).size(), 2);
+			assertEquals(testMeetingsCM.getMeetingListOn(FUTURE_DATE_02).size(), 1);
+			assertEquals(testMeetingsCM.getMeetingListOn(PAST_DATE_01).size(), 3);
+			assertEquals(testMeetingsCM.getMeetingListOn(FUTURE_DATE_03).size(), 1);
+			assertEquals(testMeetingsCM.getMeetingListOn(PAST_DATE_02).size(), 1);
+			assertEquals(testMeetingsCM.getMeetingListOn(PAST_DATE_03).size(), 1);
+			assertEquals(testMeetingsCM.getMeetingListOn(FUTURE_DATE_04).size(), 1);
+			assertEquals(testMeetingsCM.getMeetingListOn(PAST_DATE_04).size(), 1);
+		}	
+		
+		@Test
+		public void getMeetingListOnContainsNoDuplicates() {
+			assertEquals(testMeetingsCM.getMeetingListOn(PAST_DATE_01).size(), 3);
+			assertEquals(testMeetingsCM.getMeetingListOn(PAST_DATE_05).size(), 2);
+		}
+			
+		@Test //see TestData for test meetings which contain this data
+		public void getMeetingListReturnsCorrectId() {
+			assertTrue(testMeetingsCM.getMeetingListOn(FUTURE_DATE_01).get(0).getId() == 1); //see TestData
+			assertTrue(testMeetingsCM.getMeetingListOn(FUTURE_DATE_01).get(1).getId() == 9);
+			assertTrue(testMeetingsCM.getMeetingListOn(PAST_DATE_01).get(0).getId() == 3);
+			assertTrue(testMeetingsCM.getMeetingListOn(PAST_DATE_01).get(1).getId() == 10);
+		}
+		
+		@Test
+		public void getMeetingListNoMeetingOnDateReturnsEmptyList() {
+			assertEquals(testMeetingsCM.getMeetingListOn(FUTURE_DATE_06).size(),0);
+			assertEquals(testMeetingsCM.getMeetingListOn(PAST_DATE_06).size(),0);
+		}
+			
+		@Test (expected = NullPointerException.class)
+		public void getMeetingListOnNullDateThrowsException() {
+			testMeetingsCM.getMeetingListOn(null);
+		}
+			
+//------------------------------Test getPastMeetingListFor(Contact contact)----------------------------------		
+		
+		
+		
+		
+		
+} //end of class
+		
 

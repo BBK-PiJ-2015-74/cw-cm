@@ -6,6 +6,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.FileInputStream;
+
 import java.io.BufferedInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -172,12 +173,12 @@ public class ContactManagerImpl implements ContactManager {
 		}
 	}
 
-	@Override
 	/**
 	 * @see spec.ContactManager#getFutureMeetingList(Contact contact)
 	 * @throws IllegalArgumentException if the contact is not in the Contact Manager
 	 * @throws NullPointerException if the contact is null
 	 */
+	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact) {
 		
 		Objects.requireNonNull(contact);
@@ -186,23 +187,51 @@ public class ContactManagerImpl implements ContactManager {
 		
 		List<Meeting> meetingstream = cmMeetings.stream()
 				.filter(m -> m.getContacts().contains(contact) && m instanceof FutureMeeting)
-//				.sorted(Comparator.comparing(Meeting::getId)) // sorts by Id
 				.sorted(Comparator.comparing(Meeting::getDate)) // sorts by date
 				.distinct() // shows only those meetings with same contacts on different dates
 				.collect(Collectors.toList());
-				return meetingstream;		
+			return meetingstream;		
 		}
 
+	/**
+	 * @see spec.ContactManager#getMeetingListOn(Calendar date)
+	 * @throws NullPointerException if the contact is null
+	 */
 	@Override
 	public List<Meeting> getMeetingListOn(Calendar date) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Objects.requireNonNull(date);
+		
+		List<Meeting> meetingstream = cmMeetings.stream()
+				.filter(m -> m.getDate().get(Calendar.YEAR) == date.get(Calendar.YEAR) && 
+						m.getDate().get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
+						m.getDate().get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH))
+				.sorted(Comparator.comparing(Meeting::getDate)) 
+				.distinct()
+				.collect(Collectors.toList());
+		return meetingstream;
 	}
 
+	/**
+	 * @see spec.ContactManager#getPastMeetingListFor(Contact contact)
+	 * @throws IllegalArgumentException if the contact does not exist
+	 * @throws NullPointerException if the contact is null
+	 */
 	@Override
 	public List<PastMeeting> getPastMeetingListFor(Contact contact) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Objects.requireNonNull(contact);
+		
+		if (!cmContacts.contains(contact)) throw new IllegalArgumentException("The contact must be in the Contact Manager");
+		
+		List<PastMeeting> meetingstream = cmMeetings.stream()
+				.filter(m -> m.getContacts().contains(contact) && m instanceof PastMeeting)
+				.sorted(Comparator.comparing(Meeting::getDate))
+				.map(m -> (PastMeeting) m)
+				.distinct()
+				.collect(Collectors.toList());
+		
+		return meetingstream;
 	}
 
 	@Override
@@ -224,7 +253,8 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public PastMeeting addMeetingNotes(int id, String text) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub 
+		// Ran out of time at deadline - to continue tomorrow, just for fun
 		return null;
 	}
 
